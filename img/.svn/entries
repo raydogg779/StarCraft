@@ -2,8 +2,8 @@
 
 dir
 79
-svn://10.111.7.71/StarCraft/img
-svn://10.111.7.71
+svn://localhost/StarCraft/img
+svn://localhost
 
 
 
