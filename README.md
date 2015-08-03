@@ -35,6 +35,8 @@ All Protoss units definition which extends Units
 All heroes definition which extends Units
 * **Neutral.js**  
 All neutral creatures definition which extends Units
+* **Building.js**  
+All building definition which extends Gobj, some are attackable
 * **Bullets.js**  
 All bullets definition which extends Gobj
 * **Burst.js**  
@@ -42,9 +44,9 @@ All burst effect definition which extends Gobj
 * **Animation.js**  
 All animation definition which extends Gobj
 * **Magic.js**  
-All magic definition which extends Gobj
+All magic definition
 * **Upgrade.js**  
-All upgrade definition which extends Gobj
+All upgrade definition
 * **Button.js**  
 All used button definition and bind their callbacks
 * **Map.js**  
