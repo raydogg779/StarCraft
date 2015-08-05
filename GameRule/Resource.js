@@ -81,15 +81,17 @@ var Resource={
                 return false;
             }
             else {
-                //Pay bill
-                if(cost['mine']){
-                    Resource[0].mine-=cost['mine'];
-                }
-                if(cost['gas']){
-                    Resource[0].gas-=cost['gas'];
-                }
-                if(cost['magic']){
-                    this.magic-=cost['magic'];
+                if (!Resource.creditBill){
+                    //Pay immediately
+                    if(cost['mine']){
+                        Resource[0].mine-=cost['mine'];
+                    }
+                    if(cost['gas']){
+                        Resource[0].gas-=cost['gas'];
+                    }
+                    if(cost['magic']){
+                        this.magic-=cost['magic'];
+                    }
                 }
                 //Already paid
                 return true;
@@ -97,5 +99,12 @@ var Resource={
         }
         //No bill
         else return true;
+    },
+    //Pay credit card bill
+    payCreditBill:function(){
+        var cost=Resource.creditBill;
+        //Paid credit bill, no longer owe money this time
+        delete Resource.creditBill;
+        return Resource.paypal.call(this,cost);
     }
 };

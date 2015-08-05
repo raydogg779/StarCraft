@@ -553,6 +553,25 @@ Bullets.Yamato=Bullets.extends({
         burstEffect:Burst.MiddleExplode
     }
 });
+Bullets.NuclearBomb=Bullets.extends({
+    constructorPlus:function(props){},
+    prototypePlus:{
+        //Add basic unit info
+        name:"Burst",
+        duration:1000,
+        imgPos:{
+            moving:{
+                left:428,
+                top:66
+            }
+        },
+        width:74,
+        height:32,
+        frame:{
+            moving:1
+        }
+    }
+});
 Bullets.DragoonBall=Bullets.extends({
     constructorPlus:function(props){},
     prototypePlus:{

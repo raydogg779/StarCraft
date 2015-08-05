@@ -149,6 +149,8 @@ var Button={
                             }
                         }
                         else {
+                            //Pay by credit card
+                            if (Magic[magic].credit) Resource.creditBill=Resource.getCost(magic);
                             //Payment: chara paypal cost
                             if (Resource.paypal.call(chara,Resource.getCost(magic))){
                                 Magic[magic].spell.call(chara);

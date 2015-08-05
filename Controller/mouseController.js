@@ -141,9 +141,12 @@ var mouseController={
             //Prevent context menu show
             event.preventDefault();
             mouseController.rightClick(event);
-            //Cancel handler
+            //Cancel pointer
             $('div.GameLayer').removeAttr('status');
+            //Cancel callback
             Button.callback=null;
+            //Cancel credit bill
+            if (Resource.creditBill) delete Resource.creditBill;
         };
         //Double click
         $('#frontCanvas')[0].ondblclick=function(event){
@@ -175,13 +178,6 @@ var mouseController={
                     mouseController.drag=true;
                 }
             }
-            /*//Refresh
-            else {
-                if (clickX<Map.triggerMargin) Map.needRefresh="LEFT";
-                if (clickX>(Game.HBOUND-Map.triggerMargin)) Map.needRefresh="RIGHT";
-                if (clickY<Map.triggerMargin) Map.needRefresh="TOP";
-                if (clickY>(Game.VBOUND-Map.triggerMargin)) Map.needRefresh="BOTTOM";
-            }*/
         };
         //Global client refresh map
         window.onmousemove=function(event){

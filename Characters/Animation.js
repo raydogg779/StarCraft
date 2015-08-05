@@ -288,16 +288,16 @@ Animation.ScannerSweep=Animation.extends({
         name:"Magic",
         imgPos:{
             burst:{
-                left:[656, 656, 656, 656, 704, 704, 704, 704],
-                top:[1092, 1140, 1188, 1236, 1092, 1140, 1188, 1236]
+                left:[1012, 1012, 1167, 1167, 1322, 1322, 1012, 1012, 1167, 1167, 1322, 1322],
+                top:[2220, 2220, 2220, 2220, 2220, 2220, 2335, 2335, 2335, 2335, 2335, 2335]
             }
         },
-        width:48,
-        height:48,
-        scale:3,
-        duration:10000,
+        width:155,
+        height:115,
+        scale:1.5,
+        duration:6000,
         frame:{
-            burst:8
+            burst:12
         }
     }
 });
