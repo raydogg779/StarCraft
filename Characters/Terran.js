@@ -833,7 +833,7 @@ Terran.Vessel=Unit.extends({
         dieEffect:Burst.BigExplode,
         isFlying:true,
         unitType:Unit.BIG,
-        detector:true,
+        detector:Gobj.detectorBuffer,
         recover:Building.TerranBuilding.prototype.recover,
         cost:{
             mine:100,

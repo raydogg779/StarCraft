@@ -237,7 +237,7 @@ Zerg.Overlord=Unit.extends({
         dieEffect:Burst.BigZergDeath,
         isFlying:true,
         unitType:Unit.BIG,
-        detector:true,
+        detector:Gobj.detectorBuffer,
         recover:Building.ZergBuilding.prototype.recover,
         cost:{
             mine:100,

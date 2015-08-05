@@ -513,7 +513,7 @@ Building.ZergBuilding.SporeColony=Building.ZergBuilding.extends(Building.Attacka
             dock: 1
         },
         HP: 400,
-        detector:true,
+        detector:Gobj.detectorBuffer,
         cost:{
             mine:50,
             time:200
@@ -1084,7 +1084,7 @@ Building.TerranBuilding.MissileTurret=Building.TerranBuilding.extends(Building.A
             dock: 19
         },
         HP: 200,
-        detector:true,
+        detector:Gobj.detectorBuffer,
         cost:{
             mine:100,
             time:300
@@ -1733,7 +1733,7 @@ Building.ProtossBuilding.PhotonCannon=Building.ProtossBuilding.extends(Building.
         },
         HP: 100,
         SP: 100,
-        detector:true,
+        detector:Gobj.detectorBuffer,
         cost:{
             mine:150,
             time:500

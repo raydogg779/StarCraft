@@ -47,14 +47,18 @@ var Map={
             Map.fogCxt.fillStyle=Map.miniFogCxt.fillStyle='rgba(0,0,0,1)';
             Map.fogCxt.fillRect(0,0,Map.fogCanvas.width,Map.fogCanvas.height);
             Map.miniFogCxt.fillRect(0,0,130,130);
-            //Parasited enemies
+            //Other things have sight
             var parasitedEnemies=Unit.allEnemyUnits().filter(function(chara){
                 return chara.buffer.Parasite;
             });
+            var scannerSweeps=Burst.allEffects.filter(function(anime){
+                return Animation.getName(anime)=="ScannerSweep";
+            });
+            var addInObjs=parasitedEnemies.concat(scannerSweeps);
             //Clear fog
             Map.fogCxt.globalCompositeOperation=Map.miniFogCxt.globalCompositeOperation='destination-out';
             //Draw fog
-            Unit.allOurUnits().concat(Building.ourBuildings).concat(parasitedEnemies).forEach(function(chara){
+            Unit.allOurUnits().concat(Building.ourBuildings).concat(addInObjs).forEach(function(chara){
                 //Clear fog on screen for our units inside screen
                 if (chara.insideScreen()){
                     Map.fogCxt.fillStyle='rgba(0,0,0,1)';

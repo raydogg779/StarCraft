@@ -429,7 +429,7 @@ var Levels=[
             //Override
             Building.ProtossBuilding.Pyramid.prototype.HP=3000;
             Building.ProtossBuilding.Pyramid.prototype.SP=3000;
-            Building.ProtossBuilding.Pyramid.prototype.detector=true;
+            Building.ProtossBuilding.Pyramid.prototype.detector=Gobj.detectorBuffer;
             //Patch: Overlord speed up
             Upgrade.EvolvePneumatizedCarapace.effect(true);
             Upgrade.IncreaseCarrierCapacity.effect(true);

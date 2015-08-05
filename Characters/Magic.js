@@ -911,7 +911,23 @@ var Magic={
         cost:{magic:50},
         credit:true,
         enabled:true,
-        spell:function(location){}
+        spell:function(location){
+            //Has location callback info or nothing
+            if (location){
+                if (Resource.payCreditBill.call(this)){
+                    //ScannerSweep animation
+                    var anime=new Animation.ScannerSweep({x:location.x,y:location.y});
+                    //ScannerSweep sound
+                    if (anime.insideScreen()) new Audio('bgm/Magic.ScannerSweep.wav').play();
+                }
+            }
+            //If missing event info, mark Button.callback, mouseController will call back with event info
+            else {
+                Button.callback=arguments.callee;
+                Button.callback.owner=this;
+                $('div.GameLayer').attr('status','button');
+            }
+        }
     },
     ArmNuclearSilo:{
         name:"ArmNuclearSilo",

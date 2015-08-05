@@ -1,4 +1,58 @@
-var _$={};//gFrame namespace
+//gFrame namespace: DOM selector function
+var _$=function(selector){
+    var selectors=selector.trim().split(' ');
+    var result=document;//Overall
+    for (var N=0;N<selectors.length;N++){
+        var curSelector=selectors[N];
+        if (curSelector.contains('#')) {
+            var id=curSelector.split('#')[1];
+            if (result.length) {
+                var _result=[];
+                for (var M=0;M<result.length;M++){
+                    _result.push(result[M].getElementById(id));
+                }
+                result=_result;
+            }
+            else result=result.getElementById(id);
+        }
+        else {
+            var TagName=curSelector.contains('.')?curSelector.split('.')[0]:curSelector;
+            var className=curSelector.split('.')[1];
+            var tagResult, classResult;
+            if (TagName){
+                if (result.length) {
+                    var _result=[];
+                    for (var M=0;M<result.length;M++){
+                        _result=_result.concat($.makeArray(result[M].getElementsByTagName(TagName)));
+                    }
+                    tagResult=_result;
+                }
+                else tagResult=$.makeArray(result.getElementsByTagName(TagName));
+            }
+            if (className){
+                if (result.length) {
+                    var _result=[];
+                    for (var M=0;M<result.length;M++){
+                        _result=_result.concat($.makeArray(result[M].getElementsByClassName(className)));
+                    }
+                    classResult=_result;
+                }
+                else classResult=$.makeArray(result.getElementsByClassName(className));
+            }
+            if (TagName && !className) result=tagResult;
+            if (!TagName && className) result=classResult;
+            if (TagName && className) {
+                var _result=[];
+                //The intersection of tagResult and classResult
+                tagResult.forEach(function(item){
+                    if (classResult.indexOf(item)!=-1) _result.push(item);
+                });
+                result=_result;
+            }
+        }
+    }
+    return result;
+};
 
 String.prototype.contains=function(str){
     //return this.search(str)!=-1;

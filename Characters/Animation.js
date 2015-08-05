@@ -295,7 +295,8 @@ Animation.ScannerSweep=Animation.extends({
         width:155,
         height:115,
         scale:1.5,
-        duration:6000,
+        duration:15600,
+        sight:350,
         frame:{
             burst:12
         }

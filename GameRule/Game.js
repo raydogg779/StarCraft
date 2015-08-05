@@ -823,7 +823,9 @@ var Game={
             if (Game.selectedUnit instanceof Gobj && Game.selectedUnit.status=="dead") {
                 Game.changeSelectedTo({});
             }
-            //Mr.Referee will judge detector
+            //Mr.Referee will judge Arbiter's effect
+            Referee.judgeArbiter();
+            //Mr.Referee will judge detector: override Arbiter effect
             Referee.judgeDetect();
             //Adjust location for collision
             Referee.judgeCollision();

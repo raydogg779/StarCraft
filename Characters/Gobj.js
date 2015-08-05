@@ -185,3 +185,5 @@ Gobj.prototype.removeBuffer=function(bufferObj){
     //Remove failure
     else return false;
 };
+//This buffer makes invisible units visible
+Gobj.detectorBuffer={isInvisible:false};

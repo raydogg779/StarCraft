@@ -788,7 +788,7 @@ Protoss.Observer=Unit.extends({
         isInvisible:true,
         unitType:Unit.SMALL,
         recover:Building.ProtossBuilding.prototype.recover,
-        detector:true,
+        detector:Gobj.detectorBuffer,
         cost:{
             mine:25,
             gas:75,
@@ -1078,6 +1078,10 @@ Protoss.Arbiter=AttackableUnit.extends({
             '8':{name:'StasisField',condition:function(){
                 return Magic.StasisField.enabled
             }}
+        },
+        //Special skill: make nearby units invisible
+        bufferObj:{
+            isInvisible:true
         },
         //Override
         dock:function(){
