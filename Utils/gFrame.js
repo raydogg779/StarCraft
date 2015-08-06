@@ -233,3 +233,95 @@ _$.arrayEqual=function(arr1,arr2){
     //Length not same
     else return false;
 };
+
+/**********Dojo relative**********/
+_$.modules={};
+//Script loader
+_$.sourceLoader={
+    sources:{},
+    sourceNum:0,
+    loadedNum:0,
+    allLoaded:true,
+    load:function(pathName){
+        _$.sourceLoader.sourceNum++;
+        _$.sourceLoader.allLoaded=false;
+        var loaded=function(){
+            _$.sourceLoader.loadedNum++;
+            if(_$.sourceLoader.loadedNum==_$.sourceLoader.sourceNum){
+                _$.sourceLoader.allLoaded=true;
+            }
+        };
+        //Type=="script"
+        var node=document.createElement('script');
+        node.onload=function(){
+            //Load builder
+            _$.modules[pathName]=_$.define.loadedBuilders.shift();
+            loaded();
+        };
+        node.src=pathName+'.js';
+        document.getElementsByTagName('head')[0].appendChild(node);
+    },
+    allOnLoad:function(callback){
+        if (_$.sourceLoader.allLoaded) {
+            callback();
+        }
+        else {
+            setTimeout(function(){
+                _$.sourceLoader.allOnLoad(callback);
+            },100);
+        }
+    }
+};
+//Async instantiate
+_$.getModuleObj=function(name){
+    //Instantiate module constructor
+    var module=_$.modules[name];
+    //Now instantiate builder function
+    if (typeof(module)=='function'){
+        var refObjs=[];
+        if (module.refArr) {
+            module.refArr.forEach(function(ref){
+                //Recursion instantiate
+                refObjs.push(_$.getModuleObj(ref));
+            });
+        }
+        //Override module function with instance
+        _$.modules[name]=module.apply(window,refObjs);
+    }
+    return _$.modules[name];
+};
+//Register module builder function into _$.modules
+_$.define=function(refArr,builderFunc){
+    refArr.forEach(function(ref){
+        //Recursion loading
+        _$.sourceLoader.load(ref);
+    });
+    //Builder loaded
+    builderFunc.refArr=refArr;
+    _$.define.loadedBuilders.push(builderFunc);
+};
+_$.define.loadedBuilders=[];
+//Run callback functions with module references
+_$.require=function(refArr,callback){
+    refArr.forEach(function(ref){
+        //Recursion loading
+        _$.sourceLoader.load(ref);
+    });
+    _$.sourceLoader.allOnLoad(function(){
+        var refObjs=[];
+        refArr.forEach(function(ref){
+            //Recursion instantiate
+            refObjs.push(_$.getModuleObj(ref));
+        });
+        callback.apply(window,refObjs);
+    });
+};
+//Constructor extension
+_$.declare=function(globalName,father,plusObj){
+    var constructPlus=plusObj.constructor;
+    delete plusObj.constructor;
+    var protoPlus=plusObj;
+    var child=father.extends({constructorPlus:constructPlus,prototypePlus:protoPlus});
+    if (globalName) window[globalName]=child;
+    return child;
+};

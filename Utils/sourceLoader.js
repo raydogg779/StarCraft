@@ -26,7 +26,17 @@ var sourceLoader={
             source.src=src;//Pose after listener to prevent fired early
             sourceLoader.sources[id]=source;
         }
-
+        //For my Dojo: src==pathName
+        if (type=='js'){
+            var node=document.createElement('script');
+            node.onload=function(){
+                //Load builder
+                _$.modules[src]=_$.define.loadedBuilders.shift();
+                loaded();
+            };
+            node.src=src+'.js';
+            document.getElementsByTagName('head')[0].appendChild(node);
+        }
     },
     allOnLoad:function(callback){
         if (sourceLoader.allLoaded) {
@@ -34,9 +44,9 @@ var sourceLoader={
         }
         else {
             //Show Load Process
-            $('.LoadedBlock')[0].style.width=(100*this.loadedNum/this.sourceNum)>>0+"%";//Math.round
-			//$('#GameLoading').html('Loaded:'+Math.round(100*this.loadedNum/this.sourceNum)+"%");
-
+            var LoadedBlock=document.getElementsByClassName('LoadedBlock')[0];
+            if (LoadedBlock) LoadedBlock.style.width=(100*this.loadedNum/this.sourceNum)>>0+"%";//Math.round
+            //Recursion
             setTimeout(function(){
                 sourceLoader.allOnLoad(callback);
             },100);
