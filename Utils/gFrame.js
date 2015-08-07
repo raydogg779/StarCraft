@@ -245,21 +245,23 @@ _$.sourceLoader={
     load:function(pathName){
         _$.sourceLoader.sourceNum++;
         _$.sourceLoader.allLoaded=false;
-        var loaded=function(){
-            _$.sourceLoader.loadedNum++;
-            if(_$.sourceLoader.loadedNum==_$.sourceLoader.sourceNum){
-                _$.sourceLoader.allLoaded=true;
-            }
-        };
         //Type=="script"
         var node=document.createElement('script');
         node.onload=function(){
             //Load builder
             _$.modules[pathName]=_$.define.loadedBuilders.shift();
-            loaded();
+            _$.sourceLoader.loaded();
         };
+        //Block this module, should not load again
+        _$.modules[pathName]=true;
         node.src=pathName+'.js';
         document.getElementsByTagName('head')[0].appendChild(node);
+    },
+    loaded:function(){
+        _$.sourceLoader.loadedNum++;
+        if(_$.sourceLoader.loadedNum==_$.sourceLoader.sourceNum){
+            _$.sourceLoader.allLoaded=true;
+        }
     },
     allOnLoad:function(callback){
         if (_$.sourceLoader.allLoaded) {
@@ -273,51 +275,78 @@ _$.sourceLoader={
     }
 };
 //Async instantiate
-_$.getModuleObj=function(name){
+_$.instModule=function(name){
+    //Add module instantiate stack
+    _$.instModule.refStack.push(name);
     //Instantiate module constructor
     var module=_$.modules[name];
     //Now instantiate builder function
-    if (typeof(module)=='function'){
+    if (module._$isBuilder){
         var refObjs=[];
         if (module.refArr) {
             module.refArr.forEach(function(ref){
                 //Recursion instantiate
-                refObjs.push(_$.getModuleObj(ref));
+                if (ref[0]=='=') {
+                    //Closure
+                    var loc=ref.substr(1);
+                    refObjs.push(function(){
+                        return _$.modules[loc];
+                    });
+                }
+                else {
+                    if (_$.instModule.refStack.indexOf(ref)!=-1) {
+                        //Auto detect loop reference
+                        throw 'Loop reference found: '+name+' --> '+ref;
+                    }
+                    refObjs.push(_$.instModule(ref));
+                }
             });
         }
         //Override module function with instance
         _$.modules[name]=module.apply(window,refObjs);
     }
+    _$.instModule.refStack.pop();
     return _$.modules[name];
 };
+_$.instModule.refStack=[];
 //Register module builder function into _$.modules
 _$.define=function(refArr,builderFunc){
     refArr.forEach(function(ref){
-        //Recursion loading
-        _$.sourceLoader.load(ref);
+        if (ref[0]=='=') return;
+        //Recursion loading if that module not loaded
+        if (!_$.modules[ref]) _$.sourceLoader.load(ref);
     });
     //Builder loaded
     builderFunc.refArr=refArr;
+    builderFunc._$isBuilder=true;
     _$.define.loadedBuilders.push(builderFunc);
+    //_$.modules[pathName]=builderFunc;
 };
 _$.define.loadedBuilders=[];
 //Run callback functions with module references
 _$.require=function(refArr,callback){
     refArr.forEach(function(ref){
-        //Recursion loading
-        _$.sourceLoader.load(ref);
+        if (ref[0]=='=') return;
+        //Recursion loading if that module not loaded
+        if (!_$.modules[ref]) _$.sourceLoader.load(ref);
     });
     _$.sourceLoader.allOnLoad(function(){
         var refObjs=[];
         refArr.forEach(function(ref){
             //Recursion instantiate
-            refObjs.push(_$.getModuleObj(ref));
+            refObjs.push(_$.instModule(ref));
         });
         callback.apply(window,refObjs);
     });
 };
 //Constructor extension
 _$.declare=function(globalName,father,plusObj){
+    if (arguments.length==2){
+        plusObj=father;
+        father=globalName;
+        globalName=null;
+    }
+    if (!father) father=function(){};
     var constructPlus=plusObj.constructor;
     delete plusObj.constructor;
     var protoPlus=plusObj;

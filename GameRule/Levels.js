@@ -178,7 +178,10 @@ var Levels=[
             new Protoss.DarkTemplar({x:800,y:200,isEnemy:true});
             new Protoss.Observer({x:800,y:300,isEnemy:true});
             //new Protoss.Reaver({x:800,y:300,isEnemy:true});
-            new Protoss.Arbiter({x:700,y:150,isEnemy:true});
+            new Protoss.Arbiter({x:700,y:250,isEnemy:true});
+            new Protoss.Scout({x:750,y:250,isEnemy:true});
+            new Protoss.Carrier({x:700,y:150,isEnemy:true});
+            new Protoss.Corsair({x:700,y:200,isEnemy:true});
             //new Protoss.Carrier({x:700,y:250,isEnemy:true});
         }
     },

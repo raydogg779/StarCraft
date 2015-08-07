@@ -342,14 +342,14 @@ Bullets.Flame=Bullets.extends({
         duration:300,
         imgPos:{
             moving:{
-                left:[15,80,170],
-                top:[86,86,86]
+                left:[15,15,80,80,170,170],
+                top:[86,86,86,86,86,86]
             }
         },
         width:76,
         height:40,
         frame:{
-            moving:3
+            moving:6
         }
     }
 });
