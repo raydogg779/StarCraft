@@ -504,6 +504,14 @@ var Magic={
                     myself.bullet=bullet;
                     //Fire Nuclear bomb with callback
                     bullet.fire(function(){
+                        //Nuclear bomb effect, should earlier than bomb animation draw
+                        //Get in range charas, no matter ours or enemies
+                        var targets=Game.getInRangeOnes(location.x,location.y,175);
+                        targets.forEach(function(chara){
+                            //Cause 500 damage
+                            chara.life-=500;
+                            if (chara.life<=0) chara.die();
+                        });
                         //Nuclear animation
                         var anime=new Animation.NuclearStrike({x:location.x,y:location.y});
                         //Nuclear sound
@@ -513,16 +521,6 @@ var Magic={
                             Magic.NuclearStrike.enabled--;
                             Button.reset();
                         }
-                        //Nuclear bomb
-                        setTimeout(function(){
-                            //Get in range charas, no matter ours or enemies
-                            var targets=Game.getInRangeOnes(location.x,location.y,175);
-                            targets.forEach(function(chara){
-                                //Cause 500 damage
-                                chara.life-=500;
-                                if (chara.life<=0) chara.die();
-                            });
-                        },500);
                     });
                 });
             }

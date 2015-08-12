@@ -264,6 +264,7 @@ var Levels=[
             Map.setCurrentMap('TheHunters');
             Map.offsetX=0;
             Map.offsetY=3424;
+            Map.fogFlag=false;
             //Apply race style
             Game.race.choose('Terran');
             //Our buildings and units
@@ -426,6 +427,7 @@ var Levels=[
             Map.setCurrentMap('OrbitalRelay');
             Map.offsetX=(1536-Game.HBOUND/2)>>0;
             Map.offsetY=(1536-Game.VBOUND/2)>>0;
+            Map.fogFlag=false;
             //Apply race style
             Game.race.choose('Protoss');
             //Add our buildings and units

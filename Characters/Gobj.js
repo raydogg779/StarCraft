@@ -1,6 +1,5 @@
 //Gobj is original object used in StarCraft
 var Gobj=function(props){
-    if (!props) return;
     this.x=props.x;
     this.y=props.y;
     this.action=0;//Only for moving

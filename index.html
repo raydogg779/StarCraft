@@ -1,13 +1,15 @@
-﻿<html>
-	<head>
-		<title>StarCraft</title>
-		<link rel="stylesheet" href="css/style.css" />
+﻿<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>StarCraft</title>
+        <link rel="stylesheet" href="css/style.css" />
         <link rel="stylesheet" href="css/mapStyle.css" />
         <link rel="stylesheet" href="css/buttonStyle.css" />
         <link rel="stylesheet" href="css/portraitStyle.css" />
         <link rel="shortcut icon" href="favicon.ico" />
-	</head>
-	<body>
+    </head>
+    <body>
         <div id="GameLoading" class="GameLayer">
             <div class="LoadingDiv">
                 <div class="LoadingMsg">Now Loading...</div>
@@ -15,11 +17,11 @@
                     <div class="LoadedBlock"></div>
                 </div>
             </div>
-		</div>
-		<div id="GameStart" class="GameLayer">
+        </div>
+        <div id="GameStart" class="GameLayer">
             <div class="levelSelectionBg"></div>
-		</div>
-		<div id="GamePlay" class="GameLayer" race="Terran">
+        </div>
+        <div id="GamePlay" class="GameLayer" race="Terran">
             <canvas id="backCanvas"></canvas>
             <canvas id="middleCanvas"></canvas>
             <canvas id="frontCanvas"></canvas>
@@ -92,11 +94,11 @@
                     <span class="magicNum"></span>
                 </div>
             </div>
-		</div>
-		<div id="GameWin" class="GameLayer"></div>
-		<div id="GameLose" class="GameLayer"></div>
+        </div>
+        <div id="GameWin" class="GameLayer"></div>
+        <div id="GameLose" class="GameLayer"></div>
 
-		<script src="Utils/jquery.min.js"></script>
+        <script src="Utils/jquery.min.js"></script>
         <!--<script src="Utils/alloyimage.min.js"></script>-->
         <script src="Utils/gFrame.js"></script>
         <script src="Utils/sourceLoader.js"></script>
@@ -120,14 +122,14 @@
         <script src="GameRule/Game.js"></script>
         <script src="GameRule/Levels.js"></script>
         <script src="GameRule/Cheat.js"></script>
-		<script src="Controller/mouseController.js"></script>
-		<script src="Controller/keyController.js"></script>
+        <script src="Controller/mouseController.js"></script>
+        <script src="Controller/keyController.js"></script>
 
-		<script>
-			//########## AutoStart ##########//
+        <script>
+            //########## AutoStart ##########//
             $('body')[0].onload=function(){
                 Game.init();
             };
-		</script>
-	</body>
+        </script>
+    </body>
 </html>

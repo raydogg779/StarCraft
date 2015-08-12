@@ -70,7 +70,7 @@ Function.prototype.extends=function(addInObject){
     var father=this;
     //Create child self as constructor function
     var child=function(props){
-        //Remove redundant properties from proto chain by props==undefined
+        //If props==null, will throw errors during construction
         if (props){
             //Execute old constructor
             father.call(this,props);
@@ -78,8 +78,10 @@ Function.prototype.extends=function(addInObject){
             addInObject.constructorPlus.call(this,props);//this.constructorPlus(props)
         }
     };
-    //Inherit prototype from father
-    child.prototype=new father();
+    //Inherit prototype from father, clear redundant properties inside father constructor
+    var fatherClean=function(){};
+    fatherClean.prototype=father.prototype;
+    child.prototype=new fatherClean();
     child.prototype.constructor=child;
     /*//We don't need properties constructed by {}, constructor not changed;
     child.prototype.__proto__=father.prototype;//__proto__ isn't supported by IE9 and IE10, IE11 supports*/
@@ -112,16 +114,23 @@ Audio.prototype.playFromStart=function(){
 _$.requestAnimationFrame=requestAnimationFrame || webkitRequestAnimationFrame ||
     mozRequestAnimationFrame || msRequestAnimationFrame || oRequestAnimationFrame;
 
-_$.extends=function(father,addInObject){
+_$.extends=function(fathers,addInObject){
     //Create child self as constructor function
     var child=function(props){
-        father.apply(this,arguments);
-        //Add new into child constructor
-        addInObject.constructorPlus.call(this,props);//eval(addInObject.constructorPlusStr);
+        if (fathers instanceof Array){
+            var myself=this;
+            fathers.forEach(function(father){
+                father.call(myself,props);
+            });
+            //Add new into child constructor
+            addInObject.constructorPlus.call(this,props);
+        }
+        else throw('_$.extends need array type parameter fathers!');
     };
-    //Inherit prototype from father
-    child.prototype=new father();
-    child.prototype.constructor=child;
+    for (var N=0,pos=child.prototype;N<fathers.length;N++,pos=pos.__proto__){
+        //Temp resolution
+        pos.__proto__=fathers[N].prototype;
+    }
     //Add new functions into child.prototype
     for (var attr in addInObject.prototypePlus){
         child.prototype[attr]=addInObject.prototypePlus[attr];
@@ -339,18 +348,32 @@ _$.require=function(refArr,callback){
         callback.apply(window,refObjs);
     });
 };
-//Constructor extension
-_$.declare=function(globalName,father,plusObj){
+//Constructor extension: changed to multiple inherit
+_$.declare=function(globalName,fathers,plusObj){
     if (arguments.length==2){
-        plusObj=father;
-        father=globalName;
+        plusObj=fathers;
+        fathers=globalName;
         globalName=null;
     }
-    if (!father) father=function(){};
+    if (!fathers) fathers=[];
     var constructPlus=plusObj.constructor;
     delete plusObj.constructor;
     var protoPlus=plusObj;
-    var child=father.extends({constructorPlus:constructPlus,prototypePlus:protoPlus});
+    var child=_$.extends(fathers,{constructorPlus:constructPlus,prototypePlus:protoPlus});
     if (globalName) window[globalName]=child;
     return child;
+};
+
+//Publish & Subscribe topic
+_$.topic={};
+_$.subscribe=function(topic,callback){
+    if (!_$.topic[topic]) _$.topic[topic]={callbacks:[]};
+    _$.topic[topic].callbacks.push(callback);
+};
+_$.publish=function(topic,msgObj){
+    if (_$.topic[topic]){
+        _$.topic[topic].callbacks.forEach(function(callback){
+            callback.call(window,msgObj);
+        })
+    }
 };
