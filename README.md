@@ -12,7 +12,7 @@ HTML5 version for StarCraft game
 * Same cheat code as StarCraft complete
 * Mouse and key control complete
 * Basic level like campaign and tower defense complete
- ![image](https://github.com/gloomyson/StarCraft/raw/master/img/Demo/Demo.png)
+ ![image](https://github.com/gloomyson/StarCraft/raw/master/img/Demo/Demo.jpg)
 
 ## The structure of code:
 ### index.html
