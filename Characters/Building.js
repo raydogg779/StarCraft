@@ -235,8 +235,8 @@ Building.Attackable={
                             if (myself.attackEffect) {
                                 new myself.attackEffect({x:enemy.posX(),y:enemy.posY()});
                             }
-                            //Sound effect
-                            if (myself.insideScreen()) myself.sound.attack.play();
+                            //Sound effect, missile attack unit will play sound when bullet fire
+                            if (!myself.Bullet && myself.insideScreen()) myself.sound.attack.play();
                         }
                     }
                 };
@@ -1742,7 +1742,8 @@ Building.ProtossBuilding.PhotonCannon=Building.ProtossBuilding.extends(Building.
         damage:20,
         attackRange: 245,
         attackInterval:2200,
-        attackType:AttackableUnit.NORMAL_ATTACK
+        attackType:AttackableUnit.NORMAL_ATTACK,
+        fireDelay:400
     }
 });
 Building.ProtossBuilding.CyberneticsCore=Building.ProtossBuilding.extends({

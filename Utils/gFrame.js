@@ -4,6 +4,11 @@ var _$=function(selector){
     var result=document;//Overall
     for (var N=0;N<selectors.length;N++){
         var curSelector=selectors[N];
+        var filter,filterIndex=curSelector.indexOf('[');
+        if (filterIndex!=-1) {
+            filter=curSelector.substring(filterIndex+1,curSelector.indexOf(']')).trim();
+            curSelector=curSelector.substring(0,filterIndex);
+        }
         if (curSelector.contains('#')) {
             var id=curSelector.split('#')[1];
             if (result.length) {
@@ -48,6 +53,24 @@ var _$=function(selector){
                     if (classResult.indexOf(item)!=-1) _result.push(item);
                 });
                 result=_result;
+            }
+        }
+        //Apply filter
+        if (filter){
+            //Attribute value filter
+            if (filter.indexOf('=')!=-1){
+                var attr=filter.split('=')[0];
+                var val=eval(filter.split('=')[1]);
+                result=result.filter(function(item){
+                    return item.getAttribute(attr)==val;
+                });
+            }
+            //Has attribute filter
+            else {
+                var attr=filter;
+                result=result.filter(function(item){
+                    return item.getAttribute(attr)!=null;
+                });
             }
         }
     }

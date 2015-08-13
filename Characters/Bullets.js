@@ -115,6 +115,8 @@ var Bullets=Gobj.extends({
         //Upgrade Gobj moving, replace run as fire
         fire:function(callback){
             this.moving();
+            //Sound effect
+            if (this.insideScreen()) this.owner.sound.attack.play();
             //Will burst and stop moving after time limit arrive
             var myself=this;
             setTimeout(function(){
@@ -590,7 +592,17 @@ Bullets.DragoonBall=Bullets.extends({
             moving:5
         },
         forbidRotate:true,
-        burstEffect:Burst.DragoonBallBroken
+        burstEffect:Burst.DragoonBallBroken,
+        //Delay fire for Dragoon and PhotonCannon
+        fire:function(){
+            var delay=this.owner.fireDelay;
+            if (!delay) delay=0;
+            //Inherit fire function
+            var myself=this;
+            setTimeout(function(){
+                Bullets.prototype.fire.call(myself);
+            },delay);
+        }
     }
 });
 Bullets.ArchonLightening=Bullets.extends({

@@ -57,7 +57,7 @@ var Button={
                 }
             }
             //Bind basic callbacks
-            $('button.cancel').on('click',function(){
+            $('button.Cancel').on('click',function(){
                 //Reset menu by reselect unit
                 Button.reset();
             });

@@ -240,10 +240,6 @@ var Unit=Gobj.extends({
         },
         //AI when attacked by enemy
         reactionWhenAttackedBy:function(enemy,onlyDamage){
-            //Run away toward bullet direction
-            if (this.status=="dock" && !onlyDamage){
-                this.escapeFrom(enemy);
-            }
             //Resign and give reward to enemy if has no life before dead
             if (this.life<=0) {
                 //If multiple target, only die once and give reward
@@ -253,6 +249,12 @@ var Unit=Gobj.extends({
                     //Give enemy reward
                     enemy.kill++;
                 }
+                //Already dead, cannot take following actions
+                return;
+            }
+            //Run away toward bullet direction
+            if (this.status=="dock" && !onlyDamage){
+                this.escapeFrom(enemy);
             }
         },
         //Calculate damage, if enemy is damage itself, return that damage directly
@@ -669,8 +671,8 @@ var AttackableUnit=Unit.extends({
                                     new myself.attackEffect({x:enemy.posX(),y:enemy.posY()});
                                 }
                             }
-                            //Sound effect
-                            if (myself.insideScreen()) myself.sound.attack.play();
+                            //Sound effect, missile attack unit will play sound when bullet fire
+                            if (!myself.Bullet && myself.insideScreen()) myself.sound.attack.play();
                         }
                     }
                 };
@@ -766,6 +768,18 @@ var AttackableUnit=Unit.extends({
         },
         //Override
         reactionWhenAttackedBy:function(enemy,onlyDamage){
+            //Resign and give reward to enemy if has no life before dead
+            if (this.life<=0) {
+                //If multiple target, only die once and give reward
+                if (this.status!="dead") {
+                    //Killed by enemy
+                    this.die();
+                    //Give enemy reward
+                    enemy.kill++;
+                }
+                //Already dead, cannot take following actions
+                return;
+            }
             //AI when attacked by enemy
             if (!onlyDamage){
                 if (this.matchAttackLimit(enemy) && !enemy.isInvisible){
@@ -780,16 +794,6 @@ var AttackableUnit=Unit.extends({
                 }
                 else {
                     if (this.isIdle()) this.escapeFrom(enemy);
-                }
-            }
-            //Resign and give reward to enemy if has no life before dead
-            if (this.life<=0) {
-                //If multiple target, only die once and give reward
-                if (this.status!="dead") {
-                    //Killed by enemy
-                    this.die();
-                    //Give enemy reward
-                    enemy.kill++;
                 }
             }
         },
