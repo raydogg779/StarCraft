@@ -3,12 +3,85 @@ var Magic={
     Burrow:{
         name:"Burrow",
         enabled:false,
-        spell:function(){}
+        spell:function(){
+            this.dock();
+            if (this.stopAttack) this.stopAttack();
+            this.status="burrow";
+            this.action=2;
+            //Effect:Freeze target
+            var bufferObj={
+                moveTo:function(){},
+                moveToward:function(){},
+                dock:function(){}
+            };
+            if (this.attack) bufferObj.attack=function(){};
+            //Lurker has same behavior as attackable building
+            if (this.name=="Lurker") {
+                var mixin=$.extend({},Building.Attackable.prototypePlus);
+                delete mixin.name;
+                delete mixin.die;
+                $.extend(bufferObj,mixin);
+            }
+            //Freeze immediately
+            this.addBuffer(bufferObj,(this.name=="Lurker"));//onAll for Lurker
+            this.burrowBuffer=[bufferObj];
+            //Sound effect
+            if (this.insideScreen()) this.sound.burrow.play();
+            //Forbid actions
+            var itemsBackup=this.items;
+            this.items={'1':undefined,'2':undefined,'3':undefined,'4':undefined,'5':undefined,
+                '6':undefined,'7':undefined,'8':undefined,'9':undefined};
+            Button.reset();
+            //Finish burrow
+            var myself=this;
+            setTimeout(function(){
+                //Invisible when finish burrow
+                var bufferObjII={isInvisible:true};
+                myself.addBuffer(bufferObjII);
+                myself.burrowBuffer.push(bufferObjII);
+                myself.buffer.Burrow=true;
+                //Change icon when finish burrow
+                var items=_$.clone(itemsBackup);
+                for (var N in items){
+                    if (items[N] && items[N].name=="Burrow") items[N].name="Unburrow";
+                }
+                myself.items=items;
+                //Apply callback
+                Button.reset();
+            },this.imgPos.burrow.left[0].length*100-200);
+        }
     },
     Unburrow:{
         name:"Unburrow",
         enabled:false,
-        spell:function(){}
+        spell:function(){
+            this.status="unburrow";
+            this.action=0;
+            //Show unit immediately
+            this.removeBuffer(this.burrowBuffer.pop());
+            //Sound effect
+            if (this.insideScreen()) this.sound.unburrow.play();
+            //Forbid actions
+            this.items={'1':undefined,'2':undefined,'3':undefined,'4':undefined,'5':undefined,
+                '6':undefined,'7':undefined,'8':undefined,'9':undefined};
+            Button.reset();
+            //Finish unburrow
+            var myself=this;
+            delete myself.buffer.Burrow;//Restore shadow immediately
+            setTimeout(function(){
+                if (myself.burrowBuffer) {
+                    //Release freeze
+                    if (myself.removeBuffer(myself.burrowBuffer.pop())) {
+                        delete myself.burrowBuffer;
+                    }
+                }
+                //Recover icons and apply callbacks
+                delete myself.items;
+                Button.reset();
+                myself.dock();
+                myself.direction=(myself.name=="Hydralisk" || myself.name=="Lurker")?2:3;
+            },this.frame.unburrow*100-200);//margin
+        }
     },
     Load:{
         name:"Load",

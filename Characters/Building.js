@@ -203,6 +203,46 @@ Building.Attackable={
                             setTimeout(function(){
                                 myself.coolDown=true;
                             },myself.get('attackInterval'));
+                            //If AOE, init enemies
+                            var enemies;
+                            if (myself.AOE) {
+                                //Get possible targets
+                                if (myself.isEnemy) {
+                                    enemies=(myself.attackLimit)?((myself.attackLimit=="flying")?
+                                        Unit.ourFlyingUnits:Unit.ourGroundUnits.concat(Building.ourBuildings))
+                                        :(Unit.allOurUnits().concat(Building.ourBuildings));
+                                }
+                                else {
+                                    enemies=(myself.attackLimit)?((myself.attackLimit=="flying")?
+                                        Unit.enemyFlyingUnits:Unit.enemyGroundUnits.concat(Building.enemyBuildings))
+                                        :(Unit.allEnemyUnits().concat(Building.enemyBuildings));
+                                }
+                                //Range filter
+                                switch (myself.AOE.type) {
+                                    case "LINE":
+                                        //Calculate inter-points between enemy
+                                        var N=Math.ceil(myself.distanceFrom(enemy)/(myself.AOE.radius));
+                                        enemies=enemies.filter(function(chara){
+                                            for (var n=1;n<=N;n++){
+                                                var X=myself.posX()+n*(enemy.posX()-myself.posX())/N;
+                                                var Y=myself.posY()+n*(enemy.posY()-myself.posY())/N;
+                                                if (chara.insideCircle({centerX:X>>0,centerY:Y>>0,radius:myself.AOE.radius}) && !chara.isInvisible) {
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        });
+                                        break;
+                                    //Default type is CIRCLE
+                                    case "CIRCLE":
+                                    default:
+                                        enemies=enemies.filter(function(chara){
+                                            return chara.insideCircle(
+                                                {centerX:enemy.posX(),centerY:enemy.posY(),radius:myself.AOE.radius})
+                                                && !chara.isInvisible;
+                                        })
+                                }
+                            }
                             //Show attack animation if has
                             if (myself.imgPos.attack) {
                                 myself.action=0;
@@ -211,29 +251,67 @@ Building.Attackable={
                                 //Will return to dock after attack
                                 setTimeout(function(){
                                     //If still show attack
-                                    if (myself.status=="attack") myself.status="dock";
+                                    if (myself.status=="attack") {
+                                        myself.status="dock";
+                                        myself.action=0;
+                                    }
                                 },myself.frame.attack*100);//attackAnimation < attackInterval
                             }
                             //If has bullet
                             if (myself.Bullet) {
-                                //Reload one new bullet
-                                myself.bullet=new myself.Bullet({
-                                    from:myself,
-                                    to:enemy
-                                });
-                                myself.bullet.fire();
+                                //Will shoot multiple bullets in one time
+                                if (myself.continuousAttack) {
+                                    myself.bullet=new Array();
+                                    for (var N=0;N<myself.continuousAttack.count;N++){
+                                        var bullet=new myself.Bullet({
+                                            from:myself,
+                                            to:enemy
+                                        });
+                                        //Reassign bullets location
+                                        if (myself.continuousAttack.layout) myself.continuousAttack.layout(bullet,N);
+                                        if (myself.continuousAttack.onlyOnce && N!=0) {
+                                            bullet.noDamage=true;
+                                        }
+                                        bullet.fire();
+                                        myself.bullet.push(bullet);
+                                    }
+                                }
+                                else {
+                                    //Reload one new bullet
+                                    myself.bullet=new myself.Bullet({
+                                        from:myself,
+                                        to:enemy
+                                    });
+                                    myself.bullet.fire();
+                                }
                             }
                             //Else will cause damage immediately (melee attack)
                             else {
                                 //Cause damage when burst appear, after finish whole melee attack action
-                                setTimeout(function(){
-                                    enemy.getDamageBy(myself);
-                                    enemy.reactionWhenAttackedBy(myself);
-                                },myself.frame.attack*100);
+                                if (myself.AOE) {
+                                    enemies.forEach(function(chara){
+                                        chara.getDamageBy(myself);
+                                        chara.reactionWhenAttackedBy(myself);
+                                    })
+                                }
+                                else {
+                                    //Cause damage after finish whole melee attack action
+                                    setTimeout(function(){
+                                        enemy.getDamageBy(myself);
+                                        enemy.reactionWhenAttackedBy(myself);
+                                    },myself.frame.attack*100);
+                                }
                             }
                             //If has attack effect (burst)
                             if (myself.attackEffect) {
-                                new myself.attackEffect({x:enemy.posX(),y:enemy.posY()});
+                                if (myself.AOE && myself.AOE.hasEffect) {
+                                    enemies.forEach(function(chara){
+                                        new myself.attackEffect({x:chara.posX(),y:chara.posY()});
+                                    })
+                                }
+                                else {
+                                    new myself.attackEffect({x:enemy.posX(),y:enemy.posY()});
+                                }
                             }
                             //Sound effect, missile attack unit will play sound when bullet fire
                             if (!myself.Bullet && myself.insideScreen()) myself.sound.attack.play();

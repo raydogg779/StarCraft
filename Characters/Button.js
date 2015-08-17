@@ -118,14 +118,27 @@ var Button={
                 });
             });
             //Magic callbacks
-            var magics=new Array();
+            var magics=[];
             for (var magic in Magic){
                 magics.push(magic);
             }//Cannot use for-in bind together
+            var hasMagic=function(chara,magic){
+                if (chara.items){
+                    for (var attr in chara.items){
+                        if (chara.items[attr] && chara.items[attr].name==magic){
+                            if (chara.items[attr].condition){
+                                if (chara.items[attr].condition()) return true;
+                            }
+                            else return true;
+                        }
+                    }
+                }
+                return false;
+            };
             magics.forEach(function(magic){
                 $('button.'+magic).on('click',function(){
                     Unit.allOurUnits().concat(Building.ourBuildings).filter(function(chara){
-                        return (chara.selected && chara.name==Game.selectedUnit.name);
+                        return (chara.selected && hasMagic(chara,magic));
                     }).forEach(function(chara){
                         var duration=Resource.getCost(magic)?(Resource.getCost(magic).time):0;
                         //For Scarab and Interceptor

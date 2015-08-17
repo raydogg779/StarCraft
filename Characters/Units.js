@@ -38,7 +38,17 @@ var Unit=Gobj.extends({
     },
     prototypePlus:{
         name:"Unit",
-        isFlying:true,//By default it's flying unit
+        isFlying:true,
+        //Override Gobj method
+        animeFrame:function(){
+            //Animation play
+            this.action++;
+            //Override Gobj here, support hidden frames
+            var arrLimit=(this.imgPos[this.status].left[0] instanceof Array)?(this.imgPos[this.status].left[0].length):1;
+            if (this.action==this.frame[this.status] || this.action>=arrLimit) {
+                this.action=0;
+            }
+        },
         detectOutOfBound:function(){
             var boundX=Map.getCurrentMap().width-this.width;
             var boundY=Map.getCurrentMap().height-this.height;
@@ -83,6 +93,7 @@ var Unit=Gobj.extends({
             this.stop();
             //Launch new dock timer
             this.status="dock";
+            this.action=0;
             //Stop routing
             clearInterval(this.routingTimer);
             var myself=this;
@@ -294,7 +305,7 @@ var Unit=Gobj.extends({
         attackGround:function(position,loop){
             //Convert to array
             var positions=new Array().concat(position);
-            if (this instanceof AttackableUnit) this.stopAttack();
+            if (this.attack) this.stopAttack();
             //Move to first position
             this.moveTo(positions[0].x,positions[0].y);
             this.targetLock=false;
@@ -609,7 +620,10 @@ var AttackableUnit=Unit.extends({
                                 //Will return to dock after attack
                                 setTimeout(function(){
                                     //If still show attack
-                                    if (myself.status=="attack") myself.status="dock";
+                                    if (myself.status=="attack") {
+                                        myself.status="dock";
+                                        myself.action=0;
+                                    }
                                 },myself.frame.attack*100);//attackAnimation < attackInterval
                             }
                             //If has bullet
@@ -782,7 +796,7 @@ var AttackableUnit=Unit.extends({
             }
             //AI when attacked by enemy
             if (!onlyDamage){
-                if (this.matchAttackLimit(enemy) && !enemy.isInvisible){
+                if (this.attack && this.matchAttackLimit(enemy) && !enemy.isInvisible){
                     if (this.isIdle()) {
                         //Will hatred toward enemy
                         this.attack(enemy);

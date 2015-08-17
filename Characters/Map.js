@@ -242,7 +242,7 @@ var Map={
         Unit.allOurUnits().filter(function(chara){
             return chara.selected;
         }).forEach(function(chara){
-            if (chara instanceof AttackableUnit) chara.stopAttack();
+            if (chara.attack) chara.stopAttack();
             chara.targetLock=true;
             chara.moveTo(mapX,mapY);
         });

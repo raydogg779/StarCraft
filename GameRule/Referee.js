@@ -302,7 +302,8 @@ var Referee={
     alterSelectionMode:function(){
         //GC after some user changes
         $.extend([],Game.allSelected).forEach(function(chara){
-            if (chara.status=='dead') Game.allSelected.splice(Game.allSelected.indexOf(chara),1);
+            if (chara.status=='dead' || (chara.isInvisible && chara.isEnemy))
+                Game.allSelected.splice(Game.allSelected.indexOf(chara),1);
         });
         //Alter info UI: Multi selection mode
         if (Game.allSelected.length>1){

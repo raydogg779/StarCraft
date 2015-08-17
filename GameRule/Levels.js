@@ -112,7 +112,7 @@ var Levels=[
             new Zerg.Lurker({x:800,y:200,isEnemy:true});
             new Zerg.Ultralisk({x:800,y:300,isEnemy:true});
             new Zerg.Broodling({x:700,y:150,isEnemy:true});
-            new Zerg.InfestedTerran({x:700,y:250,isEnemy:true});
+            //new Zerg.InfestedTerran({x:700,y:250,isEnemy:true});
             new Zerg.Queen({x:800,y:150,isEnemy:true});
             new Zerg.Defiler({x:800,y:250,isEnemy:true});
         }

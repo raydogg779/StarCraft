@@ -61,13 +61,13 @@ var mouseController={
         new Burst.RightClickCursor({x:clickX+Map.offsetX,y:clickY+Map.offsetY});
         //Find selected one or nothing
         var selectedEnemy=Game.getSelectedOne(clickX+Map.offsetX,clickY+Map.offsetY,true);//isEnemy
-        Unit.allOurUnits().forEach(function(chara){
+        Unit.allOurUnits().concat(Building.ourBuildings).forEach(function(chara){
             //Cannot control dead man
             if (chara.status=="dead") return;
             //Control chara moving if it's selected
             if (chara.selected) {
                 //Sound effect
-                chara.sound.moving.play();
+                if (chara.sound.moving) chara.sound.moving.play();
                 //Interrupt old destination routing
                 if (chara.destination) {
                     //Break possible dead lock
@@ -82,12 +82,12 @@ var mouseController={
                     Button.reset();
                 }
                 //Unit cannot attack will always choose move mode
-                var attackOrMove=(chara instanceof AttackableUnit)?(selectedEnemy instanceof Gobj):false;
+                var attackOrMove=(chara.attack)?(selectedEnemy instanceof Gobj):false;
                 //Attack mode
                 if (attackOrMove) {
+                    if (chara.cannotMove() && !(chara.isInAttackRange(selectedEnemy))) return;
                     //Intercept invisible enemy
                     if (selectedEnemy.isInvisible) {
-                        //sourceLoader.sources['PointError'].play();
                         Referee.voice.pError.play();
                         return;
                     }
@@ -96,8 +96,9 @@ var mouseController={
                 }
                 //Move mode
                 else {
+                    if (chara.cannotMove()) return;
                     //Only attackable units can stop attack
-                    if (chara instanceof AttackableUnit) chara.stopAttack();
+                    if (chara.attack) chara.stopAttack();
                     //Lock destination by default
                     chara.targetLock=!unlock;
                     chara.moveTo(clickX+Map.offsetX,clickY+Map.offsetY);

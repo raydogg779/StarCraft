@@ -461,9 +461,12 @@ var Game={
         cxt.shadowOffsetX=(chara.isFlying)?5:3;
         cxt.shadowOffsetY=(chara.isFlying)?20:8;
         cxt.shadowColor="rgba(0,0,0,0.4)";
+        //Close shadow for burrowed
+        if (chara.buffer.Burrow) cxt.shadowOffsetX=cxt.shadowOffsetY=0;
         //Draw invisible
         if (chara.isInvisible!=undefined){
-            cxt.globalAlpha=(chara.isEnemy && chara.isInvisible)?0.1:0.5;
+            cxt.globalAlpha=(chara.isEnemy && chara.isInvisible)?0:0.5;
+            if (chara.burrowBuffer && !chara.isEnemy) cxt.globalAlpha=1;
         }
         //Draw unit or building
         var imgSrc;
@@ -792,7 +795,7 @@ var Game={
                 //Attackable unit bullet or magic bullet
                 if (chara.bullet) Game.drawBullet(chara.bullet);
                 //Add this makes chara intelligent for attack
-                if (chara instanceof AttackableUnit) chara.AI();
+                if (chara.attack) chara.AI();
                 //Judge reach destination
                 Referee.judgeReachDestination(chara);
             }
@@ -819,8 +822,9 @@ var Game={
             Game.drawInfoBox();
             Game.drawSourceBox();
             Game.drawProcessingBox();
-            //Release selected unit
-            if (Game.selectedUnit instanceof Gobj && Game.selectedUnit.status=="dead") {
+            //Release selected unit when unit died or is invisible enemy
+            if (Game.selectedUnit.status=="dead" || (Game.selectedUnit.isInvisible && Game.selectedUnit.isEnemy)) {
+                Game.selectedUnit.selected=false;
                 Game.changeSelectedTo({});
             }
             //Mr.Referee will judge Arbiter's effect

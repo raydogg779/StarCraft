@@ -86,6 +86,7 @@ Gobj.prototype.die=function(){
     //Clear old timer
     this.stop();
     this.status="dead";
+    this.action=0;
     //If has die animation
     if (this.dieEffect) {
         new this.dieEffect({x:this.posX(),y:this.posY()});
@@ -146,7 +147,7 @@ Gobj.prototype.get=function(prop){
     if ((result instanceof Array) && result.shareFlag) return result[Number(this.isEnemy)];
     else return result;
 };
-Gobj.prototype.addBuffer=function(bufferObj){
+Gobj.prototype.addBuffer=function(bufferObj,onAll){
     for (var prop in bufferObj){
         //Register in override if not exist
         if (!this.override[prop]) this.override[prop]=[];
@@ -154,7 +155,7 @@ Gobj.prototype.addBuffer=function(bufferObj){
         //Add buffer into override list
         this.override[prop].unshift(buffer);
         //Override unit property by time sequence if has
-        if (this[prop]!=null || prop=='isInvisible') this[prop]=buffer;
+        if (this[prop]!=null || prop=='isInvisible' || onAll) this[prop]=buffer;
     }
     this.bufferObjs.push(bufferObj);
     //Refresh
@@ -183,6 +184,9 @@ Gobj.prototype.removeBuffer=function(bufferObj){
     }
     //Remove failure
     else return false;
+};
+Gobj.prototype.cannotMove=function(){
+    return (this instanceof Building) || Boolean(this.burrowBuffer);
 };
 //This buffer makes invisible units visible
 Gobj.detectorBuffer={isInvisible:false};
