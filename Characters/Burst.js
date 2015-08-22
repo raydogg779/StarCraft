@@ -381,7 +381,7 @@ Burst.ArchonBurst=Burst.extends({
         width:80,
         height:80,
         frame:{
-            burst:6
+            burst:8
         }
     }
 });

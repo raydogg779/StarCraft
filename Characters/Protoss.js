@@ -541,6 +541,7 @@ Protoss.Archon=AttackableUnit.extends({
         sight:280,
         attackRange: 70,
         attackInterval: 1000,
+        attackEffect:Burst.ArchonBurst,
         portraitOffset: {x:780,y:112},
         dieEffect:Burst.BigBlueExplode,
         isFlying:false,

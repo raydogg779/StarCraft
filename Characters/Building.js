@@ -64,8 +64,8 @@ var Building=Gobj.extends({
             }
         },
         //Fix bug, for consistent, cause 100% damage on building
-        calculateDamageBy:function(enemyObj,percent){
-            return enemyObj.get('damage');
+        calculateDamageBy:function(enemyObj){
+            return (enemyObj instanceof Gobj)?enemyObj.get('damage'):enemyObj;
         },
         //Calculate damage, for consistence
         getDamageBy:function(enemy,percent){
@@ -73,7 +73,7 @@ var Building=Gobj.extends({
             var damage=0;
             //If has SP and shield remain
             if (this.shield>0) {
-                damage=((enemy.get('damage')-this.get('plasma'))*percent)>>0;
+                damage=((this.calculateDamageBy(enemy)-this.get('plasma'))*percent)>>0;
                 if (damage<1) damage=1;
                 this.shield-=damage;
                 if (this.shield<0) {

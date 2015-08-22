@@ -607,16 +607,16 @@ Bullets.DragoonBall=Bullets.extends({
 });
 Bullets.ArchonLightening=Bullets.extends({
     constructorPlus:function(props){
-        //Override position
-        this.x+=this.speed.x*3;//N/4==40/70 (ArchonRadius/AttackRange)
-        this.y+=this.speed.y*3;
+        //Override position to hands
+        this.x+=this.speed.x*6;//N/8==40/70 (ArchonRadius/AttackRange)
+        this.y+=this.speed.y*6;
         //Override speed, will not move
         this.speed={x:0,y:0};
     },
     prototypePlus:{
         //Add basic unit info
         name:"Burst",
-        duration:500,
+        duration:800,
         imgPos:{
             moving:{
                 left:[4, 192, 388, 580],
@@ -627,8 +627,7 @@ Bullets.ArchonLightening=Bullets.extends({
         height:75,
         frame:{
             moving:4
-        },
-        burstEffect:Burst.ArchonBurst
+        }
     }
 });
 Bullets.ScoutMissile=Bullets.extends({

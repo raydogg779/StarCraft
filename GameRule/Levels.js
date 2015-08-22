@@ -92,6 +92,8 @@ var Levels=[
             Map.setCurrentMap('BloodBath');
             //Apply race style
             Game.race.choose('Zerg');
+            //Apply cheat for testing
+            Cheat.execute('something for nothing');
             //Load units
             new Zerg.Drone({x:100,y:100});
             new Zerg.Zergling({x:200,y:100});
@@ -104,6 +106,9 @@ var Levels=[
             new Zerg.Queen({x:100,y:50});
             new Zerg.Defiler({x:200,y:50});
             new Hero.Sarah({x:100,y:150});
+            new Zerg.Mutalisk({x:50,y:50});
+            new Zerg.Guardian({x:50,y:150});
+            new Zerg.Devourer({x:50,y:250});
             //Add enemy
             new Zerg.Drone({x:700,y:100,isEnemy:true});
             new Zerg.Zergling({x:700,y:200,isEnemy:true});
@@ -124,6 +129,8 @@ var Levels=[
             Map.setCurrentMap('OrbitalRelay');
             //Apply race style
             Game.race.choose('Terran');
+            //Apply cheat for testing
+            Cheat.execute('something for nothing');
             //Load units
             new Terran.Marine({x:100,y:100});
             new Terran.Firebat({x:200,y:100});
@@ -136,6 +143,9 @@ var Levels=[
             new Terran.Vessel({x:100,y:50});
             new Terran.Valkyrie({x:200,y:50});
             new Hero.Kerrigan({x:100,y:150});
+            new Terran.Wraith({x:200,y:150});
+            new Terran.SCV({x:50,y:250});
+            new Terran.BattleCruiser({x:150,y:250});
             //Add enemy
             new Terran.Marine({x:700,y:100,isEnemy:true});
             new Terran.Firebat({x:700,y:200,isEnemy:true});
@@ -154,6 +164,8 @@ var Levels=[
             Map.setCurrentMap('ThinIce');
             //Apply race style
             Game.race.choose('Protoss');
+            //Apply cheat for testing
+            Cheat.execute('something for nothing');
             //Load units
             new Protoss.Probe({x:100,y:100});
             new Protoss.Zealot({x:200,y:100});
@@ -264,9 +276,10 @@ var Levels=[
             Map.setCurrentMap('TheHunters');
             Map.offsetX=0;
             Map.offsetY=3424;
-            Map.fogFlag=false;
             //Apply race style
             Game.race.choose('Terran');
+            //Apply cheat
+            Cheat.execute('black sheep wall');
             //Our buildings and units
             new Building.ZergBuilding.OvermindI({x:662,y:3828});
             new Building.ZergBuilding.OvermindII({x:300,y:3694});

@@ -150,13 +150,22 @@ _$.extends=function(fathers,addInObject){
         }
         else throw('_$.extends need array type parameter fathers!');
     };
-    for (var N=0,pos=child.prototype;N<fathers.length;N++,pos=pos.__proto__){
-        //Temp resolution
-        pos.__proto__=fathers[N].prototype;
+    if (fathers.length>0){
+        var mixinProto=fathers[0].prototype;
+        for (N=1;N<fathers.length;N++){
+            //Mixin interfaces
+            mixinProto=_$.delegate(mixinProto,fathers[N].prototype);
+            //Still instanceof interface == false
+            mixinProto.constructor=fathers[N];
+        }
+        child.prototype=_$.delegate(mixinProto,addInObject.prototypePlus);
+        child.prototype.constructor=child;
     }
-    //Add new functions into child.prototype
-    for (var attr in addInObject.prototypePlus){
-        child.prototype[attr]=addInObject.prototypePlus[attr];
+    else {
+        //Original method
+        for (var attr in addInObject.prototypePlus){
+            child.prototype[attr]=addInObject.prototypePlus[attr];
+        }
     }
     return child;
 };
@@ -399,4 +408,11 @@ _$.publish=function(topic,msgObj){
             callback.call(window,msgObj);
         })
     }
+};
+
+//lang.delegate:cover with one proto layer
+_$.delegate=function(chara,bufferObj){
+    var func=function(){};
+    func.prototype=chara;
+    return _$.mixin(new func(),bufferObj);
 };

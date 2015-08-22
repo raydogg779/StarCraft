@@ -269,7 +269,7 @@ var Unit=Gobj.extends({
             }
         },
         //Calculate damage, if enemy is damage itself, return that damage directly
-        calculateDamageBy:function(enemyObj,percent){
+        calculateDamageBy:function(enemyObj){
             var damage=0;
             if (enemyObj instanceof Gobj){
                 var enemyAttackType=enemyObj.attackType;
