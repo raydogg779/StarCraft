@@ -236,12 +236,15 @@ div#GamePlay div.panel_Control {
     padding-left:6px;
     padding-top:26px;*/
 }
+div#GamePlay div.panel_Info {
+    border-width:22px 0 0 0;
+    border-style:solid;
+}
 div#GamePlay[race="Zerg"] div.panel_Map {
     background-position: 0 bottom;
 }
 div#GamePlay[race="Zerg"] div.panel_Info {
     border-image: url('../img/Menu/ControlPanel.png') 22 1265 0 163 repeat;
-    border-width:22px 0 0 0;
 }
 div#GamePlay[race="Zerg"] div.panel_Control {
     background-position: -400px bottom;
@@ -251,7 +254,6 @@ div#GamePlay[race="Protoss"] div.panel_Map {
 }
 div#GamePlay[race="Protoss"] div.panel_Info {
     border-image: url('../img/Menu/ControlPanel.png') 22 743 0 745 repeat;
-    border-width:22px 0 0 0;
 }
 div#GamePlay[race="Protoss"] div.panel_Control {
     background-position: -958px bottom;
@@ -261,7 +263,6 @@ div#GamePlay[race="Terran"] div.panel_Map {
 }
 div#GamePlay[race="Terran"] div.panel_Info {
     border-image: url('../img/Menu/ControlPanel.png') 22 149 0 1284 repeat;
-    border-width:22px 0 0 0;
 }
 div#GamePlay[race="Terran"] div.panel_Control {
     background-position: -1516px bottom;

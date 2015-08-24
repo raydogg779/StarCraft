@@ -103,6 +103,7 @@ var Cheat={
                 });
                 break;
             case "liuda is god":
+                Map.fogFlag=false;
                 Referee.winCondition=Referee.loseCondition=function(){
                     return false;
                 };

@@ -2,6 +2,10 @@
 var Gobj=function(props){
     this.x=props.x;
     this.y=props.y;
+    if (props.target instanceof Gobj){
+        this.x=(props.target.posX()-this.width/2)>>0;
+        this.y=(props.target.posY()-this.height/2)>>0;
+    }
     this.action=0;//Only for moving
     this.status="";
     this.buffer={};//Buffer names
@@ -187,6 +191,51 @@ Gobj.prototype.removeBuffer=function(bufferObj){
 };
 Gobj.prototype.cannotMove=function(){
     return (this instanceof Building) || Boolean(this.burrowBuffer);
+};
+Gobj.prototype.evolveTo=function(charaType,burstArr){
+    var newTypeChara=null;
+    var selectedStatus=[this.selected,(this==Game.selectedUnit)];
+    //Hide die burst and sound for old unit, then die
+    this.dieEffect=this.sound.death=null;
+    this.die();
+    if (this.processing) delete this.processing;
+    //Birth function
+    var bornAt=function(chara){
+        newTypeChara=new charaType({target:chara});
+        if (selectedStatus[0]) Game.addIntoAllSelected(newTypeChara);
+        if (selectedStatus[1]) Game.changeSelectedTo(newTypeChara);
+    };
+    //Burst chain
+    if (burstArr){
+        var pos={x:this.posX(),y:this.posY()};
+        var birth=new Burst[burstArr[0]](pos);
+        var evolveChain=function(N){
+            return function(){
+                birth=new Burst[burstArr[N]](pos);
+                if ((N+1)<burstArr.length) birth.callback=evolveChain(N+1);
+                //Finish evolve chain
+                else birth.callback=function(){
+                    var times=charaType.prototype.birthCount;
+                    if (times==null) times=1;
+                    for (var N=0;N<times;N++){
+                        bornAt(birth);
+                    }
+                };
+            };
+        };
+        //Start evolve chain
+        if (burstArr.length>1) birth.callback=evolveChain(1);
+        //Finish evolve chain
+        else birth.callback=function(){
+            var times=charaType.prototype.birthCount;
+            if (times==null) times=1;
+            for (var N=0;N<times;N++){
+                bornAt(birth);
+            }
+        };
+    }
+    else bornAt(this);
+    return newTypeChara;
 };
 //This buffer makes invisible units visible
 Gobj.detectorBuffer={isInvisible:false};

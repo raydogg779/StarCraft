@@ -5,6 +5,7 @@ div.panel_Control button{
     height:34px;
     display:none;
     background-image: url('../img/Menu/CmdIcons.png');
+    border-width:2px;
     cursor:url('../img/Menu/cursor.ico'),auto;
     /*For text inside button*/
     color:red;

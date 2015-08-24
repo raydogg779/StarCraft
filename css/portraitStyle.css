@@ -41,6 +41,15 @@ div[name="portrait"].Defiler{
 div[name="portrait"].InfestedTerran{
     background-position: -780px 0;
 }
+div[name="portrait"].Larva{
+    background-position: -900px 0;
+}
+div[name="portrait"].Egg{
+    background-position: -840px 0;
+}
+div[name="portrait"].Cocoon{
+    background-position: -360px -224px;
+}
 /*Terran Protraits*/
 div[name="portrait"].SCV{
     background-position: 0 -56px;

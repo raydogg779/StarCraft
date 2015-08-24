@@ -48,6 +48,8 @@ var Unit=Gobj.extends({
             if (this.action==this.frame[this.status] || this.action>=arrLimit) {
                 this.action=0;
             }
+            //Multiple hidden frames support
+            if (this.imgPos[this.status].left[0][this.action]==-1) this.action=0;
         },
         detectOutOfBound:function(){
             var boundX=Map.getCurrentMap().width-this.width;
@@ -474,7 +476,24 @@ Unit.hover=function(){
         N++;
     },200);
 };
-
+//Dock action IV
+Unit.walkAroundLarva=function(){
+    //Inherited dock from Unit.js
+    Unit.prototype.dock.call(this);
+    //Add in new things
+    if (this.dockTimer) clearInterval(this.dockTimer);
+    var myself=this;
+    this.dockTimer=setInterval(function(){
+        var direction=(myself.direction+1)%8;//Math.floor
+        //Walk around, for all critters to use
+        if (myself.status=="dock") {
+            Unit.prototype.moveTo.call(myself,myself.posX()+myself.get('speed')[direction].x*6,myself.posY()+myself.get('speed')[direction].y*6);
+        }
+        else {
+            clearInterval(myself.dockTimer);
+        }
+    },2000);
+};
 var AttackableUnit=Unit.extends({
     constructorPlus:function(props){
         this.attackTimer=0;

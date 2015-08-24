@@ -86,6 +86,7 @@ var Game={
         sourceLoader.load("img","img/Charas/InfestedTerran.png","InfestedTerran");
         sourceLoader.load("img","img/Charas/Queen.png","Queen");
         sourceLoader.load("img","img/Charas/Defiler.png","Defiler");
+        sourceLoader.load("img","img/Charas/Larva.png","Larva");
         //Terran
         sourceLoader.load("img","img/Charas/BattleCruiser.png","BattleCruiser");
         sourceLoader.load("img","img/Charas/Wraith.png","Wraith");
@@ -355,11 +356,14 @@ var Game={
             //Display info
             $('div.panel_Info>div[class*="info"]').show();
             //Draw selected unit portrait
-            if (Game.selectedUnit instanceof Unit)
-                $('div.infoLeft div[name="portrait"]')[0].className=Game.selectedUnit.name;
-            if (Game.selectedUnit instanceof Building)
-                $('div.infoLeft div[name="portrait"]')[0].className=
-                    Game.selectedUnit.attack?Game.selectedUnit.inherited.inherited.name:Game.selectedUnit.inherited.name;
+            if (chara.portrait) $('div.infoLeft div[name="portrait"]')[0].className=chara.portrait;//Override portrait
+            else {
+                if (Game.selectedUnit instanceof Unit)
+                    $('div.infoLeft div[name="portrait"]')[0].className=Game.selectedUnit.name;
+                if (Game.selectedUnit instanceof Building)
+                    $('div.infoLeft div[name="portrait"]')[0].className=
+                        Game.selectedUnit.attack?Game.selectedUnit.inherited.inherited.name:Game.selectedUnit.inherited.name;
+            }
             //Show selected unit HP,SP and MP
             $('div.infoLeft span._Health')[0].style.color=Game.selectedUnit.lifeStatus();
             $('div.infoLeft span.life')[0].innerHTML=Game.selectedUnit.life>>0;
@@ -470,10 +474,14 @@ var Game={
         }
         //Draw unit or building
         var imgSrc;
-        if (chara instanceof Building)
-            imgSrc=sourceLoader.sources[chara.attack?chara.inherited.inherited.name:chara.inherited.name];
+        if (chara instanceof Building){
+            if (chara.source) imgSrc=sourceLoader.sources[chara.source];
+            else {
+                imgSrc=sourceLoader.sources[chara.attack?chara.inherited.inherited.name:chara.inherited.name];
+            }
+        }
         //Unit, not building
-        else imgSrc=sourceLoader.sources[chara.name];
+        else imgSrc=sourceLoader.sources[chara.source?chara.source:chara.name];
         //Convert position
         var charaX=(chara.x-Map.offsetX)>>0;
         var charaY=(chara.y-Map.offsetY)>>0;
@@ -700,7 +708,9 @@ var Game={
         Game.allSelected.forEach(function(chara,N){
             var node=document.createElement('div');
             node.setAttribute('name','portrait');
-            node.className=(chara instanceof Building)?(chara.attack?chara.inherited.inherited.name:chara.inherited.name):chara.name;
+            //Override portrait
+            if (chara.portrait) node.className=chara.portrait;
+            else node.className=(chara instanceof Building)?(chara.attack?chara.inherited.inherited.name:chara.inherited.name):chara.name;
             node.title=chara.name;
             node.style.borderColor=chara.lifeStatus();
             node.onclick=function(){

@@ -133,7 +133,7 @@ var Map={
         /*Game.backCxt.shadowColor="#212";//"rgba(0,0,0,0.7)"
         Game.backCxt.shadowBlur=8;*/
         Building.allBuildings.filter(function(chara){
-            return (chara instanceof Building.ZergBuilding) && chara.insideScreen();
+            return (chara instanceof Building.ZergBuilding) && !chara.noMud && chara.insideScreen();
         }).forEach(function(chara){
             var centerX=chara.posX()-Map.offsetX;
             var centerY=chara.posY()-Map.offsetY;

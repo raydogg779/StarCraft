@@ -24,6 +24,16 @@ var Building=Gobj.extends({
         name:"Building",
         armor:0,
         sight:385,
+        //Override to support multiple hidden frames
+        animeFrame:function(){
+            //Animation play
+            this.action++;
+            //Override Gobj here, building doesn't have direction
+            var arrLimit=(this.imgPos[this.status].left instanceof Array)?(this.imgPos[this.status].left.length):1;
+            if (this.action==this.frame[this.status] || this.action>=arrLimit) this.action=0;
+            //Multiple hidden frames support
+            if (this.imgPos[this.status].left[this.action]==-1) this.action=0;
+        },
         //Dock means stop moving but keep animation
         dock:function(){
             //Clear old timer
@@ -911,6 +921,7 @@ Building.ZergBuilding.InfestedBase=Building.ZergBuilding.extends({
     prototypePlus: {
         //Add basic unit info
         name: "InfestedBase",
+        noMud:true,
         imgPos: {
             dock: {
                 left: 1160,
@@ -926,6 +937,72 @@ Building.ZergBuilding.InfestedBase=Building.ZergBuilding.extends({
         items: {
             '1':{name:'InfestedTerran'}
         }
+    }
+});
+Building.ZergBuilding.Egg=Building.ZergBuilding.extends({
+    constructorPlus:function(props){
+        this.sound={
+            selected:new Audio('bgm/Egg.selected.wav'),
+            death:new Audio('bgm/Egg.death.wav')
+        };
+        //Hidden frames
+        this.action=13;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Egg",
+        source: "Larva",
+        portrait: "Egg",
+        noMud:true,
+        imgPos: {
+            dock: {
+                left: [2,38,74,110,146,182,218,254,290,326,362,398,-1,2,38,74,110,-1,291,329,367,405,442,480],
+                top: [213,213,213,213,213,213,213,213,213,213,213,213,-1,173,173,173,173,-1,372,372,372,372,372,372]
+            }
+        },
+        width: 36,
+        height: 40,
+        frame: {
+            dock: 12
+        },
+        HP: 200,
+        armor: 10,
+        sight: 35,
+        dieEffect: Burst.EggDeath
+    }
+});
+Building.ZergBuilding.Cocoon=Building.ZergBuilding.extends({
+    constructorPlus:function(props){
+        this.sound={
+            selected:new Audio('bgm/Cocoon.selected.wav'),
+            death:new Audio('bgm/Mutalisk.death.wav')
+        };
+        //Override default flyingFlag for building
+        this.isFlying=true;
+        //Hidden frames
+        this.action=10;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Cocoon",
+        source: "Larva",
+        portrait: "Cocoon",
+        noMud:true,
+        imgPos: {
+            dock: {
+                left: [0,63,126,189,252,315,378,441,504,-1,0,63,126,189,252,315],
+                top: [1105,1105,1105,1105,1105,1105,1105,1105,1105,-1,1060,1060,1060,1060,1060,1060]
+            }
+        },
+        width: 62,
+        height: 45,
+        frame: {
+            dock: 9
+        },
+        HP: 200,
+        armor: 10,
+        sight: 35,
+        dieEffect: Burst.SmallZergFlyingDeath
     }
 });
 Building.ZergBuilding.OvermindI=Building.ZergBuilding.extends({

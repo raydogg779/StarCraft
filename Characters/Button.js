@@ -173,9 +173,60 @@ var Button={
                 });
             });
 
-            //Unit callbacks
-            [Zerg,Terran,Protoss].forEach(function(Race){
-                var unitTypes=new Array();
+            //Unit callbacks:
+            //For Zerg units
+            var unitTypes=[];
+            for (var unitType in Zerg){
+                unitTypes.push(unitType);
+            }
+            var exceptions=['Guardian','Devourer'];
+            unitTypes.forEach(function(unitType){
+                $('button.'+unitType).on('click',function(){
+                    Unit.allOurUnits().filter(function(chara){
+                        return (chara.selected && chara.name==Game.selectedUnit.name);
+                    }).forEach(function(chara){
+                        //Payment
+                        if (Resource.paypal(Resource.getCost(unitType))){
+                            //Evolve as egg
+                            var egg;
+                            //Evolve as cocoon
+                            if (exceptions.indexOf(unitType)!=-1){
+                                egg=chara.evolveTo(Building.ZergBuilding.Cocoon);
+                            }
+                            else {
+                                egg=chara.evolveTo(Building.ZergBuilding.Egg);
+                                if (unitType=='Lurker') egg.action=18;
+                            }
+                            //Calculate duration
+                            var duration=Resource.getCost(unitType).time;
+                            //Cheat: Operation cwal
+                            if (Cheat.cwal) duration=0;
+                            setTimeout(function(){
+                                if (egg.status!='dead'){
+                                    //Evolve
+                                    if (exceptions.indexOf(unitType)!=-1){
+                                        //Cocoon
+                                        egg.evolveTo(Zerg[unitType],[unitType+'Birth']);
+                                    }
+                                    else {
+                                        //Egg
+                                        egg.evolveTo(Zerg[unitType],['EggBirth',unitType+'Birth']);
+                                    }
+                                }
+                            },duration*100);
+                            //Processing flag on egg
+                            egg.processing={
+                                name:unitType,
+                                startTime:new Date().getTime(),//Game._clock,
+                                time:duration
+                            };
+                        }
+                    });
+                });
+            });
+            //For Terran and Protoss units
+            [Terran,Protoss].forEach(function(Race){
+                var unitTypes=[];
                 for (var unitType in Race){
                     unitTypes.push(unitType);
                 }//Cannot use for-in bind together

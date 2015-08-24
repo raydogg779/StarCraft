@@ -4,6 +4,7 @@ Zerg.Drone=AttackableUnit.extends({
     constructorPlus:function(props){
         this.sound.burrow=new Audio('bgm/Zerg.burrow.wav');
         this.sound.unburrow=new Audio('bgm/Zerg.unburrow.wav');
+        this.direction=3;
     },
     prototypePlus: {
         //Add basic unit info
@@ -273,6 +274,7 @@ Zerg.Zergling=AttackableUnit.extends({
             man:0.5,
             time:140
         },
+        birthCount:2,
         upgrade:['UpgradeMeleeAttacks','EvolveCarapace'],
         items:{
             '9':{name:'Burrow',condition:function(){
@@ -283,7 +285,8 @@ Zerg.Zergling=AttackableUnit.extends({
 });
 Zerg.Overlord=Unit.extends({
     constructorPlus:function(props){
-        //Nothing
+        this.direction=3;
+        this.y-=12;//(OverlordBirth.height-Overlord.height)/2
     },
     prototypePlus: {
         //Add basic unit info
@@ -328,7 +331,7 @@ Zerg.Overlord=Unit.extends({
         armor:0,
         sight:315,
         portraitOffset: {x:120,y:0},
-        dieEffect:Burst.BigZergDeath,
+        dieEffect:Burst.BigZergFlyingDeath,
         isFlying:true,
         unitType:Unit.BIG,
         detector:Gobj.detectorBuffer,
@@ -355,6 +358,7 @@ Zerg.Hydralisk=AttackableUnit.extends({
     constructorPlus:function(props){
         this.sound.burrow=new Audio('bgm/Zerg.burrow.wav');
         this.sound.unburrow=new Audio('bgm/Zerg.unburrow.wav');
+        this.direction=3;
     },
     prototypePlus: {
         //Add basic unit info
@@ -513,12 +517,7 @@ Zerg.Lurker=Unit.extends({
         this.sound.attack=new Audio('bgm/Lurker.attack.wav');
         this.sound.burrow=new Audio('bgm/Lurker.burrow.wav');
         this.sound.unburrow=new Audio('bgm/Zerg.unburrow.wav');
-        //Hidden frames
-        var myself=this;
-        setTimeout(function(){
-            myself.action=2;
-            myself.direction=3;
-        },0);
+        this.direction=3;
     },
     prototypePlus: {
         //Add basic unit info
@@ -547,26 +546,8 @@ Zerg.Lurker=Unit.extends({
                 ]
             },
             dock: {
-                left: [
-                    [0, -1, 650, 722, 794, 866, 938, 1010, 1082],
-                    [144, -1, 650, 722, 794, 866, 938, 1010, 1082],
-                    [288, -1, 650, 722, 794, 866, 938, 1010, 1082],
-                    [432, -1, 650, 722, 794, 866, 938, 1010, 1082],
-                    [576, -1, 650, 722, 794, 866, 938, 1010, 1082],
-                    [792, -1, 650, 722, 794, 866, 938, 1010, 1082],
-                    [936, -1, 650, 722, 794, 866, 938, 1010, 1082],
-                    [1080, -1, 650, 722, 794, 866, 938, 1010, 1082]
-                ],
-                top: [
-                    [1, -1, 480, 480, 480, 480, 480, 480, 480],
-                    [1, -1, 480, 480, 480, 480, 480, 480, 480],
-                    [1, -1, 480, 480, 480, 480, 480, 480, 480],
-                    [1, -1, 480, 480, 480, 480, 480, 480, 480],
-                    [1, -1, 480, 480, 480, 480, 480, 480, 480],
-                    [1, -1, 480, 480, 480, 480, 480, 480, 480],
-                    [1, -1, 480, 480, 480, 480, 480, 480, 480],
-                    [1, -1, 480, 480, 480, 480, 480, 480, 480]
-                ]
+                left: [0,144,288,432,576,792,936,1080],
+                top: [1,1,1,1,1,1,1,1]
             },
             burrow: {
                 left: [
@@ -674,6 +655,9 @@ Zerg.Mutalisk=AttackableUnit.extends({
         //Same action mapping
         this.imgPos.dock=this.imgPos.moving;
         this.frame.dock=this.frame.moving;
+        this.direction=3;
+        //Adjust for multi frames
+        this.y-=12;
     },
     prototypePlus: {
         //Add basic unit info
@@ -716,7 +700,7 @@ Zerg.Mutalisk=AttackableUnit.extends({
         attackRange: 105,
         attackInterval: 2200,//3000
         portraitOffset: {x:300,y:0},
-        dieEffect:Burst.SmallZergDeath,
+        dieEffect:Burst.SmallZergFlyingDeath,
         isFlying:true,
         unitType:Unit.SMALL,
         attackType:AttackableUnit.NORMAL_ATTACK,
@@ -747,12 +731,7 @@ Zerg.Guardian=AttackableUnit.extends({
         //Same action mapping
         this.imgPos.dock=this.imgPos.moving;
         this.frame.dock=this.frame.moving;
-        //Hidden frames
-        var myself=this;
-        setTimeout(function(){
-            myself.action=8;
-            myself.direction=3;
-        },0);
+        this.direction=3;
     },
     prototypePlus: {
         //Add basic unit info
@@ -760,24 +739,24 @@ Zerg.Guardian=AttackableUnit.extends({
         imgPos: {
             moving: {
                 left: [
-                    [0, 0, 0, 0, 0, 0, 0, -1, 656, 737, 818, 899, 980, 1061],
-                    [162, 162, 162, 162, 162, 162, 162, -1, 656, 737, 818, 899, 980, 1061],
-                    [324, 324, 324, 324, 324, 324, 324, -1, 656, 737, 818, 899, 980, 1061],
-                    [486, 486, 486, 486, 486, 486, 486, -1, 656, 737, 818, 899, 980, 1061],
-                    [648, 648, 648, 648, 648, 648, 648, -1, 656, 737, 818, 899, 980, 1061],
-                    [891, 891, 891, 891, 891, 891, 891, -1, 656, 737, 818, 899, 980, 1061],
-                    [1053, 1053, 1053, 1053, 1053, 1053, 1053, -1, 656, 737, 818, 899, 980, 1061],
-                    [1215, 1215, 1215, 1215, 1215, 1215, 1215, -1, 656, 737, 818, 899, 980, 1061]
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [162, 162, 162, 162, 162, 162, 162],
+                    [324, 324, 324, 324, 324, 324, 324],
+                    [486, 486, 486, 486, 486, 486, 486],
+                    [648, 648, 648, 648, 648, 648, 648],
+                    [891, 891, 891, 891, 891, 891, 891],
+                    [1053, 1053, 1053, 1053, 1053, 1053, 1053],
+                    [1215, 1215, 1215, 1215, 1215, 1215, 1215]
                 ],
                 top: [
-                    [0, 74, 148, 222, 296, 370, 444, -1, 538, 538, 538, 538, 538, 538],
-                    [0, 74, 148, 222, 296, 370, 444, -1, 538, 538, 538, 538, 538, 538],
-                    [0, 74, 148, 222, 296, 370, 444, -1, 538, 538, 538, 538, 538, 538],
-                    [0, 74, 148, 222, 296, 370, 444, -1, 538, 538, 538, 538, 538, 538],
-                    [0, 74, 148, 222, 296, 370, 444, -1, 538, 538, 538, 538, 538, 538],
-                    [0, 74, 148, 222, 296, 370, 444, -1, 538, 538, 538, 538, 538, 538],
-                    [0, 74, 148, 222, 296, 370, 444, -1, 538, 538, 538, 538, 538, 538],
-                    [0, 74, 148, 222, 296, 370, 444, -1, 538, 538, 538, 538, 538, 538]
+                    [0, 74, 148, 222, 296, 370, 444],
+                    [0, 74, 148, 222, 296, 370, 444],
+                    [0, 74, 148, 222, 296, 370, 444],
+                    [0, 74, 148, 222, 296, 370, 444],
+                    [0, 74, 148, 222, 296, 370, 444],
+                    [0, 74, 148, 222, 296, 370, 444],
+                    [0, 74, 148, 222, 296, 370, 444],
+                    [0, 74, 148, 222, 296, 370, 444]
                 ]
             }
         },
@@ -795,7 +774,7 @@ Zerg.Guardian=AttackableUnit.extends({
         attackRange: 280,
         attackInterval: 3000,
         portraitOffset: {x:360,y:0},
-        dieEffect:Burst.BigZergDeath,
+        dieEffect:Burst.BigZergFlyingDeath,
         isFlying:true,
         attackLimit:"ground",
         unitType:Unit.BIG,
@@ -820,12 +799,7 @@ Zerg.Devourer=AttackableUnit.extends({
         //Same action mapping
         this.imgPos.dock=this.imgPos.moving;
         this.frame.dock=this.frame.moving;
-        //Hidden frames
-        var myself=this;
-        setTimeout(function(){
-            myself.action=7;
-            myself.direction=3;
-        },0);
+        this.direction=3;
     },
     prototypePlus: {
         //Add basic unit info
@@ -833,24 +807,24 @@ Zerg.Devourer=AttackableUnit.extends({
         imgPos: {
             moving: {
                 left: [
-                    [0,0,0,0,0,0,-1,666,764,862,960,1058,1156],
-                    [146,146,146,146,146,146,-1,666,764,862,960,1058,1156],
-                    [292,292,292,292,292,292,-1,666,764,862,960,1058,1156],
-                    [438,438,438,438,438,438,-1,666,764,862,960,1058,1156],
-                    [584,584,584,584,584,584,-1,666,764,862,960,1058,1156],
-                    [803,803,803,803,803,803,-1,666,764,862,960,1058,1156],
-                    [949,949,949,949,949,949,-1,666,764,862,960,1058,1156],
-                    [1095,1095,1095,1095,1095,1095,-1,666,764,862,960,1058,1156]
+                    [0,0,0,0,0,0],
+                    [146,146,146,146,146,146],
+                    [292,292,292,292,292,292],
+                    [438,438,438,438,438,438],
+                    [584,584,584,584,584,584],
+                    [803,803,803,803,803,803],
+                    [949,949,949,949,949,949],
+                    [1095,1095,1095,1095,1095,1095]
                 ],
                 top: [
-                    [0,86,172,258,344,430,-1,998,998,998,998,998,998],
-                    [0,86,172,258,344,430,-1,998,998,998,998,998,998],
-                    [0,86,172,258,344,430,-1,998,998,998,998,998,998],
-                    [0,86,172,258,344,430,-1,998,998,998,998,998,998],
-                    [0,86,172,258,344,430,-1,998,998,998,998,998,998],
-                    [0,86,172,258,344,430,-1,998,998,998,998,998,998],
-                    [0,86,172,258,344,430,-1,998,998,998,998,998,998],
-                    [0,86,172,258,344,430,-1,998,998,998,998,998,998]
+                    [0,86,172,258,344,430],
+                    [0,86,172,258,344,430],
+                    [0,86,172,258,344,430],
+                    [0,86,172,258,344,430],
+                    [0,86,172,258,344,430],
+                    [0,86,172,258,344,430],
+                    [0,86,172,258,344,430],
+                    [0,86,172,258,344,430]
                 ]
             },
             attack: {
@@ -891,7 +865,7 @@ Zerg.Devourer=AttackableUnit.extends({
         attackRange: 175,//210
         attackInterval: 5000,//10000
         portraitOffset: {x:420,y:0},
-        dieEffect:Burst.BigZergDeath,
+        dieEffect:Burst.BigZergFlyingDeath,
         isFlying:true,
         attackLimit:"flying",
         unitType:Unit.BIG,
@@ -920,6 +894,9 @@ Zerg.Scourge=AttackableUnit.extends({
         //Same action mapping
         this.imgPos.attack=this.imgPos.dock=this.imgPos.moving;
         this.frame.attack=this.frame.dock=this.frame.moving;
+        this.direction=0;
+        //Adjust for multi frames
+        this.y-=20;
     },
     prototypePlus: {
         //Add basic unit info
@@ -963,7 +940,7 @@ Zerg.Scourge=AttackableUnit.extends({
         attackRange:35,
         attackInterval: 1000,//Suicide
         portraitOffset: {x:480,y:0},
-        dieEffect:Burst.SmallZergDeath,
+        dieEffect:Burst.SmallZergFlyingDeath,
         attackEffect:Burst.ScourgeBomb,
         isFlying:true,
         attackLimit:"flying",
@@ -977,6 +954,7 @@ Zerg.Scourge=AttackableUnit.extends({
             man:0.5,
             time:150
         },
+        birthCount:2,
         upgrade:['UpgradeFlyerCarapace'],
         //Override
         dock:function(){
@@ -990,6 +968,9 @@ Zerg.Queen=Unit.extends({
         //Same action mapping
         this.imgPos.dock=this.imgPos.moving;
         this.frame.dock=this.frame.moving;
+        this.direction=3;
+        //Adjust for multi frames
+        this.y-=16;
     },
     prototypePlus: {
         //Add basic unit info
@@ -1031,7 +1012,7 @@ Zerg.Queen=Unit.extends({
         MP: 200,
         sight:350,
         portraitOffset: {x:540,y:0},
-        dieEffect:Burst.BigZergDeath,
+        dieEffect:Burst.BigZergFlyingDeath,
         isFlying:true,
         unitType:Unit.MIDDLE,
         recover:Building.ZergBuilding.prototype.recover,
@@ -1148,7 +1129,7 @@ Zerg.Broodling=AttackableUnit.extends({
 });
 Zerg.Ultralisk=AttackableUnit.extends({
     constructorPlus:function(props){
-        //Nothing
+        this.direction=3;
     },
     prototypePlus: {
         //Add basic unit info
@@ -1241,6 +1222,7 @@ Zerg.Defiler=Unit.extends({
         this.frame.dock=this.frame.moving;
         this.sound.burrow=new Audio('bgm/Zerg.burrow.wav');
         this.sound.unburrow=new Audio('bgm/Zerg.unburrow.wav');
+        this.direction=3;
     },
     prototypePlus: {
         //Add basic unit info
@@ -1478,6 +1460,103 @@ Zerg.InfestedTerran=AttackableUnit.extends({
         dock:function(){
             //Use the same behavior
             AttackableUnit.turnAround.call(this);
+        }
+    }
+});
+Zerg.Larva=Unit.extends({
+    constructorPlus:function(props){
+        this.imgPos.dock=this.imgPos.moving;
+        this.direction=2;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Larva",
+        imgPos: {
+            moving: {
+                left: [
+                    [1, 1, 1, 1, 1],
+                    [67, 67, 67, 67, 67],
+                    [133, 133, 133, 133, 133],
+                    [199, 199, 199, 199, 199],
+                    [265, 265, 265, 265, 265],
+                    [331, 331, 331, 331, 331],
+                    [397, 397, 397, 397, 397],
+                    [463, 463, 463, 463, 463]
+                ],
+                top: [
+                    [1, 30, 59, 88, 117],
+                    [1, 30, 59, 88, 117],
+                    [1, 30, 59, 88, 117],
+                    [1, 30, 59, 88, 117],
+                    [1, 30, 59, 88, 117],
+                    [1, 30, 59, 88, 117],
+                    [1, 30, 59, 88, 117],
+                    [1, 30, 59, 88, 117]
+                ]
+            }
+        },
+        width: 32,//33X+1
+        height: 28,//29X+1
+        frame: {
+            moving: 5,
+            dock: 1
+        },
+        //Only for moving status, override
+        speed:Unit.getSpeedMatrixBy(4),
+        HP: 25,
+        armor:10,
+        sight:70,
+        portraitOffset: {x:900,y:0},
+        dieEffect:Burst.LarvaDeath,
+        unitType:Unit.SMALL,
+        isFlying:false,
+        recover:Building.ZergBuilding.prototype.recover,
+        upgrade:['EvolveCarapace'],
+        items:{
+            '1':{name:'Drone'},
+            '2':{name:'Zergling',condition:function(){
+                return Building.ourBuildings.some(function(chara){
+                    return chara.name=='SpawningPool';
+                })
+            }},
+            '3':{name:'Overlord'},
+            '4':{name:'Hydralisk',condition:function(){
+                return Building.ourBuildings.some(function(chara){
+                    return chara.name=='HydraliskDen';
+                })
+            }},
+            '5':{name:'Mutalisk',condition:function(){
+                return Building.ourBuildings.some(function(chara){
+                    return chara.name=='Spire' || chara.name=='GreaterSpire';
+                })
+            }},
+            '6':{name:'Scourge',condition:function(){
+                return Building.ourBuildings.some(function(chara){
+                    return chara.name=='Spire' || chara.name=='GreaterSpire';
+                })
+            }},
+            '7':{name:'Queen',condition:function(){
+                return Building.ourBuildings.some(function(chara){
+                    return chara.name=='QueenNest';
+                })
+            }},
+            '8':{name:'Ultralisk',condition:function(){
+                return Building.ourBuildings.some(function(chara){
+                    return chara.name=='UltraliskCavern';
+                })
+            }},
+            '9':{name:'Defiler',condition:function(){
+                return Building.ourBuildings.some(function(chara){
+                    return chara.name=='DefilerMound';
+                })
+            }}
+        },
+        //Prevent user control moving
+        moveTo:function(){},
+        moveToward:function(){},
+        //Override
+        dock:function(){
+            Unit.walkAroundLarva.call(this);
         }
     }
 });
