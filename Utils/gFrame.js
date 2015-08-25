@@ -402,6 +402,13 @@ _$.subscribe=function(topic,callback){
     if (!_$.topic[topic]) _$.topic[topic]={callbacks:[]};
     _$.topic[topic].callbacks.push(callback);
 };
+//Need add .owner on callback to identify who is subscriber
+_$.unSubscribe=function(topic,callback){
+    if (_$.topic[topic] && _$.topic[topic].callbacks){
+        var index=_$.topic[topic].callbacks.indexOf(callback);
+        _$.topic[topic].callbacks.splice(index,1);
+    }
+};
 _$.publish=function(topic,msgObj){
     if (_$.topic[topic]){
         _$.topic[topic].callbacks.forEach(function(callback){
@@ -415,4 +422,12 @@ _$.delegate=function(chara,bufferObj){
     var func=function(){};
     func.prototype=chara;
     return _$.mixin(new func(),bufferObj);
+};
+
+//lang.hitch:bind context this with function
+_$.hitch=function(func,thisP){
+    //Higher-order function: compress this pointer into closure here
+    return function() {
+        func.apply(thisP,arguments);
+    };
 };

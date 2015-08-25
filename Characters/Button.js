@@ -35,7 +35,7 @@ var Button={
         if (chara.items){
             for (var N in chara.items){
                 if (chara.items[N]!=null) {
-                    $('button[num="'+N+'"]').attr('class',chara.items[N].name).show();
+                    $('button[num="'+N+'"]').off('click').attr('class',chara.items[N].name).show();
                     if (chara.items[N].condition && chara.items[N].condition()==false)
                         $('button[num="'+N+'"]').attr('disabled',true);
                     else $('button[num="'+N+'"]').removeAttr('disabled');
@@ -720,7 +720,7 @@ var Button={
                     //Show right click cursor
                     new Burst.RightClickCursor(location);
                     //Call back with location info
-                    Button.callback.call(Button.callback.owner,location);
+                    Button.callback(location);
                 }
         }
         $('div.GameLayer').removeAttr('status');

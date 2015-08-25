@@ -202,8 +202,11 @@ Gobj.prototype.evolveTo=function(charaType,burstArr){
     //Birth function
     var bornAt=function(chara){
         newTypeChara=new charaType({target:chara});
-        if (selectedStatus[0]) Game.addIntoAllSelected(newTypeChara);
-        if (selectedStatus[1]) Game.changeSelectedTo(newTypeChara);
+        //Fix cannot select egg issue
+        setTimeout(function(){
+            if (selectedStatus[0]) Game.addIntoAllSelected(newTypeChara);
+            if (selectedStatus[1]) Game.changeSelectedTo(newTypeChara);
+        },0);
     };
     //Burst chain
     if (burstArr){

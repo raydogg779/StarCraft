@@ -141,10 +141,9 @@ var Magic={
                 }
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -184,10 +183,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -240,10 +238,9 @@ var Magic={
                     }
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -273,10 +270,9 @@ var Magic={
                     });
                 }
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -346,10 +342,9 @@ var Magic={
                     }
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -396,10 +391,9 @@ var Magic={
                     }
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -551,10 +545,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -597,10 +590,9 @@ var Magic={
                     });
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -639,10 +631,9 @@ var Magic={
                 }
                 delete Resource.creditBill;//else
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -689,10 +680,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -735,10 +725,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -822,10 +811,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -867,10 +855,9 @@ var Magic={
                     }
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -930,10 +917,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -969,10 +955,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -992,10 +977,9 @@ var Magic={
                     if (anime.insideScreen()) new Audio('bgm/Magic.ScannerSweep.wav').play();
                 }
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1072,10 +1056,9 @@ var Magic={
                     }
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1138,10 +1121,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1178,10 +1160,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1230,10 +1211,9 @@ var Magic={
                 //Empty object {}, cannot spell
                 else delete Resource.creditBill;
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1286,10 +1266,9 @@ var Magic={
                     }
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1350,10 +1329,9 @@ var Magic={
                     if (anime.insideScreen()) new Audio('bgm/Magic.Recall.wav').play();
                 }
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1413,10 +1391,9 @@ var Magic={
                     }
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1480,10 +1457,9 @@ var Magic={
                     }
                 });
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
@@ -1523,32 +1499,11 @@ var Magic={
                     //Cannot reach target, pError
                 }
             }
-            //If missing event info, mark Button.callback, mouseController will call back with event info
+            //If missing location info, mark Button.callback, mouseController will call back with location
             else {
-                Button.callback=arguments.callee;
-                Button.callback.owner=this;
+                Button.callback=_$.hitch(arguments.callee,this);
                 $('div.GameLayer').attr('status','button');
             }
         }
     }
-    /*Archon:{
-        name:"Archon",
-        enabled:true,
-        cost:{
-            mine:50,
-            gas:150,
-            man:4
-        },
-        spell:function(location){}
-    },
-    DarkArchon:{
-        name:"DarkArchon",
-        enabled:true,
-        cost:{
-            mine:125,
-            gas:100,
-            man:4
-        },
-        spell:function(location){}
-    }*/
 };
