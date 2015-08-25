@@ -116,7 +116,7 @@ var Bullets=Gobj.extends({
         fire:function(callback){
             this.moving();
             //Sound effect
-            if (this.insideScreen()) this.owner.sound.attack.play();
+            if (this.insideScreen() && this.owner.sound.attack) this.owner.sound.attack.play();
             //Will burst and stop moving after time limit arrive
             var myself=this;
             setTimeout(function(){
