@@ -117,6 +117,8 @@ Building.ZergBuilding=Building.extends({
             selected:new Audio('bgm/ZergBuilding.selected.wav'),
             death:new Audio('bgm/ZergBuilding.death.wav')
         };
+        //Need draw mud for it
+        Map.needRefresh="MAP";
     },
     prototypePlus: {
         //Add basic unit info
@@ -400,7 +402,7 @@ Building.Attackable={
 //Define all buildings
 Building.ZergBuilding.Hatchery=Building.ZergBuilding.extends({
     constructorPlus:function(props){
-        //Nothing
+        this.larvas=[];
     },
     prototypePlus: {
         //Add basic unit info
@@ -418,6 +420,7 @@ Building.ZergBuilding.Hatchery=Building.ZergBuilding.extends({
         },
         HP: 1250,
         manPlus: 10,
+        produceLarva:true,
         cost:{
             mine:300,
             time:1200
@@ -436,7 +439,7 @@ Building.ZergBuilding.Hatchery=Building.ZergBuilding.extends({
 });
 Building.ZergBuilding.Lair=Building.ZergBuilding.extends({
     constructorPlus:function(props){
-        //Nothing
+        this.larvas=[];
     },
     prototypePlus: {
         //Add basic unit info
@@ -454,6 +457,7 @@ Building.ZergBuilding.Lair=Building.ZergBuilding.extends({
         },
         HP: 1800,
         manPlus: 10,
+        produceLarva:true,
         cost:{
             mine:150,
             gas:100,
@@ -476,7 +480,7 @@ Building.ZergBuilding.Lair=Building.ZergBuilding.extends({
 });
 Building.ZergBuilding.Hive=Building.ZergBuilding.extends({
     constructorPlus:function(props){
-        //Nothing
+        this.larvas=[];
     },
     prototypePlus: {
         //Add basic unit info
@@ -494,6 +498,7 @@ Building.ZergBuilding.Hive=Building.ZergBuilding.extends({
         },
         HP: 2500,
         manPlus: 10,
+        produceLarva:true,
         cost:{
             mine:200,
             gas:150,
@@ -548,19 +553,22 @@ Building.ZergBuilding.CreepColony=Building.ZergBuilding.extends({
 });
 Building.ZergBuilding.SunkenColony=Building.ZergBuilding.extends(Building.Attackable).extends({
     constructorPlus:function(props){
-        this.imgPos.attack=this.imgPos.dock;
         this.sound.attack=new Audio('bgm/Colony.attack.wav');
     },
     prototypePlus: {
         //Add basic unit info
         name: "SunkenColony",
         imgPos: {
-            dock: {
-                left: [20,118,214,310,404,500,596,692,786,884],
-                top: [802,802,802,802,802,802,802,802,802,802]
+            dock:{
+                left:916,
+                top:714
+            },
+            attack: {
+                left:[20,116,212,308,404,500,596,692,788,884],
+                top:[802,802,802,802,802,802,802,802,802,802]
             }
         },
-        width: 84,
+        width: 84,//96N+20
         height: 66,
         frame: {
             dock: 1,
@@ -2305,51 +2313,326 @@ Building.ProtossBuilding.TeleportPoint=Building.ProtossBuilding.extends({
         SP: 100
     }
 });
-
-/*Evolve effect*/
-/*
-Building.ZergBuilding.EvolveGroundUnit=Building.ZergBuilding.extends({
+//Evolve related
+Building.ZergBuilding.Egg=Building.ZergBuilding.extends({
     constructorPlus:function(props){
-        //Nothing
+        this.sound={
+            selected:new Audio('bgm/Egg.selected.wav'),
+            death:new Audio('bgm/Egg.death.wav')
+        };
+        //Hidden frames
+        this.action=13;
     },
     prototypePlus: {
         //Add basic unit info
-        name: "EvolveGroundUnit",
+        name: "Egg",
+        source: "Larva",
+        portrait: "Egg",
+        noMud:true,
         imgPos: {
             dock: {
-                left: [524, 562, 600, 638, 676, 714, 524, 562, 600, 638, 676, 714],
-                top: [724, 724, 724, 724, 724, 724, 767, 767, 767, 767, 767, 767]
+                left: [2,38,74,110,146,182,218,254,290,326,362,398,-1,2,38,74,110,-1,291,329,367,405,442,480],
+                top: [213,213,213,213,213,213,213,213,213,213,213,213,-1,173,173,173,173,-1,372,372,372,372,372,372]
             }
         },
-        width: 38,
-        height: 43,
+        width: 36,
+        height: 40,
         frame: {
             dock: 12
         },
-        HP: 999,
-        armor:10
+        HP: 200,
+        armor: 10,
+        sight: 35,
+        dieEffect: Burst.EggDeath
     }
 });
-Building.ZergBuilding.EvolveFlyingUnit=Building.ZergBuilding.extends({
+Building.ZergBuilding.Cocoon=Building.ZergBuilding.extends({
+    constructorPlus:function(props){
+        this.sound={
+            selected:new Audio('bgm/Cocoon.selected.wav'),
+            death:new Audio('bgm/Mutalisk.death.wav')
+        };
+        //Override default flyingFlag for building
+        this.isFlying=true;
+        //Hidden frames
+        this.action=10;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Cocoon",
+        source: "Larva",
+        portrait: "Cocoon",
+        noMud:true,
+        imgPos: {
+            dock: {
+                left: [0,63,126,189,252,315,378,441,504,-1,0,63,126,189,252,315],
+                top: [1105,1105,1105,1105,1105,1105,1105,1105,1105,-1,1060,1060,1060,1060,1060,1060]
+            }
+        },
+        width: 62,
+        height: 45,
+        frame: {
+            dock: 9
+        },
+        HP: 200,
+        armor: 10,
+        sight: 35,
+        dieEffect: Burst.SmallZergFlyingDeath
+    }
+});
+Building.ZergBuilding.MutationS=Building.ZergBuilding.extends({
+    constructorPlus:function(props){
+        //Hidden frames
+        this.action=7;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Mutation",
+        imgPos: {
+            dock: {
+                left: [356, 516, 676, 836, 996, 1156, -1, 36, 36, 196, 196],
+                top: [962, 962, 962, 962, 962, 962, -1, 962, 962, 962, 962]
+            }
+        },
+        width: 88,//160N+36
+        height: 84,
+        frame: {
+            dock: 6
+        },
+        HP: 200,
+        armor: 0,
+        sight: 350
+    }
+});
+Building.ZergBuilding.MutationM=Building.ZergBuilding.extends({
     constructorPlus:function(props){
         //Nothing
     },
     prototypePlus: {
         //Add basic unit info
-        name: "EvolveFlyingUnit",
+        name: "Mutation",
         imgPos: {
             dock: {
-                left: [438, 501, 564, 627, 690, 438, 501, 564, 627],
-                top: [810, 810, 810, 810, 810, 856, 856, 856, 856]
+                left: [20, 180, 340, 500, 660, 820],
+                top: [1048,1048,1048,1048,1048,1048]
             }
         },
-        width: 63,
-        height: 46,
+        width: 120,//160N+20
+        height: 112,
         frame: {
-            dock: 9
+            dock: 6
         },
-        HP: 999,
-        armor:10
+        HP: 400,
+        armor: 0,
+        sight: 350
     }
 });
-*/
+Building.ZergBuilding.MutationL=Building.ZergBuilding.extends({
+    constructorPlus:function(props){
+        //Nothing
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Mutation",
+        imgPos: {
+            dock: {
+                left: [0, 160, 320, 480, 640, 800],
+                top: [1160,1160,1160,1160,1160,1160]
+            }
+        },
+        width: 160,//160N
+        height: 150,
+        frame: {
+            dock: 6
+        },
+        HP: 600,
+        armor: 0,
+        sight: 350
+    }
+});
+Building.TerranBuilding.ConstructionS=Building.TerranBuilding.extends({
+    constructorPlus:function(props){
+        this.imgPos.dock=this.imgPos.step1;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Construction",
+        imgPos: {
+            step1: {
+                left: 798,
+                top: 296
+            },
+            step2: {
+                left: 894,
+                top: 296
+            },
+            step3: {
+                left: 990,
+                top: 296
+            }
+        },
+        width: 72,
+        height: 70,
+        frame: {
+            step1: 1,
+            step2: 1,
+            step3: 1,
+            dock: 1
+        },
+        HP: 400,
+        armor: 0,
+        sight: 350
+    }
+});
+Building.TerranBuilding.ConstructionM=Building.TerranBuilding.extends({
+    constructorPlus:function(props){
+        this.imgPos.dock=this.imgPos.step1;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Construction",
+        imgPos: {
+            step1: {
+                left: 498,
+                top: 296
+            },
+            step2: {
+                left: 594,
+                top: 296
+            },
+            step3: {
+                left: 690,
+                top: 296
+            }
+        },
+        width: 96,
+        height: 70,
+        frame: {
+            step1: 1,
+            step2: 1,
+            step3: 1,
+            dock: 1
+        },
+        HP: 400,
+        armor: 0,
+        sight: 350
+    }
+});
+Building.TerranBuilding.ConstructionL=Building.TerranBuilding.extends({
+    constructorPlus:function(props){
+        this.imgPos.dock=this.imgPos.step1;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Construction",
+        imgPos: {
+            step1: {
+                left: 276,
+                top: 442
+            },
+            step2: {
+                left: 404,
+                top: 442
+            },
+            step3: {
+                left: 540,
+                top: 442
+            }
+        },
+        width: 124,
+        height: 86,
+        frame: {
+            step1: 1,
+            step2: 1,
+            step3: 1,
+            dock: 1
+        },
+        HP: 400,
+        armor: 0,
+        sight: 350
+    }
+});
+Building.ProtossBuilding.Archon=Building.ProtossBuilding.extends({
+    constructorPlus:function(props){
+        //Hidden frames
+        this.action=7;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Archon",
+        source: "Archon",
+        portrait: "Archon",
+        imgPos: {
+            dock: {
+                left: [1340,1460,1580,1700,1820,1940,-1,1100,1220],
+                top: [1700,1700,1700,1700,1700,1700,-1,1700,1700]
+            }
+        },
+        width: 80,
+        height: 80,
+        frame: {
+            dock: 6
+        },
+        HP: 10,
+        SP: 350,
+        armor: 0,
+        plasma:0,
+        sight: 280,
+        dieEffect: Burst.BigBlueExplode
+    }
+});
+Building.ProtossBuilding.DarkArchon=Building.ProtossBuilding.extends({
+    constructorPlus:function(props){
+        //Hidden frames
+        this.action=7;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "DarkArchon",
+        source: "DarkArchon",
+        portrait: "DarkArchon",
+        imgPos: {
+            dock: {
+                left: [1340,1460,1580,1700,1820,1940,-1,1100,1220],
+                top: [1220,1220,1220,1220,1220,1220,-1,1220,1220]
+            }
+        },
+        width: 80,
+        height: 80,
+        frame: {
+            dock: 6
+        },
+        HP: 25,
+        SP: 200,
+        armor: 1,
+        plasma:0,
+        sight: 350,
+        dieEffect: Burst.BigBlueExplode
+    }
+});
+Building.ProtossBuilding.Tranfer=Building.ProtossBuilding.extends({
+    constructorPlus:function(props){
+        //Hidden frames
+        this.action=7;
+    },
+    prototypePlus: {
+        //Add basic unit info
+        name: "Tranfer",
+        imgPos: {
+            dock: {
+                left: [10,74,150,234,328,418,-1,10,74,150,234,328,418],
+                top: [722,722,722,722,722,722,-1,658,658,658,658,658,658]
+            }
+        },
+        width: 64,
+        height: 64,
+        frame: {
+            dock: 6
+        },
+        HP: 200,
+        SP: 200,
+        armor: 0,
+        plasma:0,
+        sight: 350
+    }
+});

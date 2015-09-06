@@ -167,7 +167,7 @@ div[name="portrait"].Kakaru{
 }
 /*Building Protraits*/
 div[name="portrait"].ZergBuilding{
-    background-position: 0 0;
+    background-position: 0 -168px;
 }
 div[name="portrait"].TerranBuilding{
     background-position: -780px -56px;

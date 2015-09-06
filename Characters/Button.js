@@ -62,7 +62,22 @@ var Button={
                 Button.reset();
             });
             $('button.SelectLarva').on('click',function(){
-                Button.equipButtonsFor(Button.allZergUnits);
+                var larvas=Game.selectedUnit.larvas;
+                if (larvas){
+                    larvas=larvas.filter(function(chara){
+                        return chara.status!='dead';
+                    });
+                    //If found alive larva
+                    if (larvas.length){
+                        Game.unselectAll();
+                        Game.addIntoAllSelected(larvas,true);
+                        if (larvas[0] instanceof Gobj){
+                            Game.changeSelectedTo(larvas[0]);
+                            //Sound effect
+                            larvas[0].sound.selected.play();
+                        }
+                    }
+                }
             });
             $('button.BasicMutation').on('click',function(){
                 Button.equipButtonsFor(Button.basicZergMutations);
@@ -364,47 +379,6 @@ var Button={
     },
 
     /***************Buttons***************/
-    allZergUnits:{
-        items:{
-            '1':{name:'Drone'},
-            '2':{name:'Zergling',condition:function(){
-                return Building.ourBuildings.some(function(chara){
-                    return chara.name=='SpawningPool';
-                })
-            }},
-            '3':{name:'Overlord'},
-            '4':{name:'Hydralisk',condition:function(){
-                return Building.ourBuildings.some(function(chara){
-                    return chara.name=='HydraliskDen';
-                })
-            }},
-            '5':{name:'Mutalisk',condition:function(){
-                return Building.ourBuildings.some(function(chara){
-                    return chara.name=='Spire' || chara.name=='GreaterSpire';
-                })
-            }},
-            '6':{name:'Scourge',condition:function(){
-                return Building.ourBuildings.some(function(chara){
-                    return chara.name=='Spire' || chara.name=='GreaterSpire';
-                })
-            }},
-            '7':{name:'Queen',condition:function(){
-                return Building.ourBuildings.some(function(chara){
-                    return chara.name=='QueenNest';
-                })
-            }},
-            '8':{name:'Ultralisk',condition:function(){
-                return Building.ourBuildings.some(function(chara){
-                    return chara.name=='UltraliskCavern';
-                })
-            }},
-            '9':{name:'Defiler',condition:function(){
-                return Building.ourBuildings.some(function(chara){
-                    return chara.name=='DefilerMound';
-                })
-            }}
-        }
-    },
     basicZergMutations:{
         items:{
             '1':{name:'Hatchery'},

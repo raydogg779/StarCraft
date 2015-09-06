@@ -37,7 +37,8 @@ var Burst=Gobj.extends({
             this.y=props.y-this.height*times/2;
         }
         //Play duration
-        if (props.duration) this.duration=props.duration;
+        if (this.forever) this.duration=-1;//Keep playing until killed
+        if (props.duration!=null) this.duration=props.duration;//Override duration
         //Resize if set scale
         if (props.scale) this.scale=props.scale;
         //Restore callback after burst finish
@@ -75,9 +76,12 @@ var Burst=Gobj.extends({
             },100);
             //Will die(stop playing) after time limit arrive
             var duration=this.duration?this.duration:(this.frame['burst']*100);
-            setTimeout(function(){
-                myself.die();
-            },duration);
+            //Last forever if duration<0 (-1)
+            if (duration>0){
+                setTimeout(function(){
+                    myself.die();
+                },duration);
+            }
         },
         die:function(){
             //Run callback when burst die
@@ -672,7 +676,10 @@ Burst.BigBlueExplode=Burst.extends({
 });
 Burst.ZergBuildingBurst=Burst.extends({
     constructorPlus:function(props){
-        //Nothing
+        //Need clear mud when ZergBuildingBurst finished
+        this.callback=function(){
+            Map.needRefresh="MAP";
+        };
     },
     prototypePlus:{
         //Add basic unit info

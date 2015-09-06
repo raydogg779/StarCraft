@@ -180,6 +180,7 @@ var Map={
     refresh:function(direction){
         var edgeX=Map.getCurrentMap().width-Game.HBOUND;
         var edgeY=Map.getCurrentMap().height-Game.VBOUND+Game.infoBox.height-5;
+        var onlyMap;
         switch (direction){
             case "LEFT":
                 Map.offsetX-=Map.speed;
@@ -197,10 +198,13 @@ var Map={
                 Map.offsetY+=Map.speed;
                 if (Map.offsetY>edgeY) Map.offsetY=edgeY;
                 break;
+            case "MAP":
+                onlyMap=true;
+                break;
         }
         Map.draw();
         //Need re-calculate fog when screen moves
-        Map.refreshFog();
+        if (!onlyMap) Map.refreshFog();
     },
     refreshMiniMap:function(){
         //Selected map size

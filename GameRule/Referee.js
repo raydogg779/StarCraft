@@ -6,7 +6,7 @@ var Referee={
     _pos:[[-1,0],[1,0],[0,-1],[0,1]],//Collision avoid
     voice:{
         pError:new Audio('bgm/PointError.wav'),
-        button:new Audio('bgm/button.wav'),
+        button:new Audio('bgm/Button.wav'),
         resource:{
             Zerg:{
                 mine:new Audio('bgm/mine.Zerg.wav'),
@@ -326,6 +326,22 @@ var Referee={
         else {
             $('div.override').hide();
             $('div.override div.multiSelection').hide();
+        }
+    },
+    addLarva:function(){
+        //Every 20 sec
+        if (Game._clock%200==0){
+            Building.allBuildings.filter(function(chara){
+                return chara.produceLarva;
+            }).forEach(function(chara){
+                //Can give birth to 3 larvas
+                for(var N=0;N<3;N++){
+                    if (chara.larvas[N]==null || chara.larvas[N].status=="dead"){
+                        chara.larvas[N]=new Zerg.Larva({x:(chara.x+N*48),y:(chara.y+chara.height),isEnemy:chara.isEnemy});
+                        break;
+                    }
+                }
+            });
         }
     },
     judgeMan:function(){

@@ -557,9 +557,6 @@ var Game={
                 cxt.fillRect(chara.x-Map.offsetX,chara.y-Map.offsetY+offsetY+(chara.SP?10:5),chara.width*chara.magic/chara.get('MP'),5);
                 cxt.strokeRect(chara.x-Map.offsetX,chara.y-Map.offsetY+offsetY+(chara.SP?10:5),chara.width,5);
             }
-            /*//Draw outer line
-            cxt.strokeStyle="black";
-            cxt.strokeRect(chara.x-Map.offsetX,chara.y-Map.offsetY+offsetY,chara.width,-offsetY);*/
         }
     },
     drawEffect:function(chara){
@@ -849,6 +846,8 @@ var Game={
             Referee.judgeDying();
             //Update man data
             Referee.judgeMan();
+            //Mr.Referee will help add larvas
+            Referee.addLarva();
             //Mr.Referee will monitor mini map every 1 sec
             Referee.monitorMiniMap();
             //Mr.Referee will cover fogs on maps every 1 sec
